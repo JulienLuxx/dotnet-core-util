@@ -4,3 +4,8 @@
 
 /Common/.vs/Common/v16
 /Common/Common.Util/obj
+/Common/Common.StandardUtil/obj
+/Common/Common.Util/bin/Debug/netstandard2.0
+/Common/.vs/Common/DesignTimeBuild
+/Common/Common.CoreUtil/bin/Debug
+/Common/Common.CoreUtil/obj
