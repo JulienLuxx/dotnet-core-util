@@ -10,3 +10,4 @@
 /Common/Common.CoreUtil/bin/Debug
 /Common/Common.CoreUtil/obj
 /Common/Common.XUnitTest/obj
+/Common/Common.XUnitTest/bin/Debug/netcoreapp2.2
