@@ -6,6 +6,7 @@
     <Authors>JulienLux</Authors>
     <Company>JulienLux</Company>
     <Product>JulienLux</Product>
+    <Copyright>Copyright (c) 2019 JulienLux</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
