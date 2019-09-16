@@ -11,3 +11,7 @@
 /Common/Common.CoreUtil/obj
 /Common/Common.XUnitTest/obj
 /Common/Common.XUnitTest/bin/Debug/netcoreapp2.2
+/Common/Common.CoreUtil/bin/Release/netcoreapp2.1
+/Common/Common.Util/bin/Release/netstandard2.0
+/Common/Common.CoreUtil/bin/Release/netstandard2.0
+/Common/Common.XUnitTest/bin/Release/netcoreapp2.2
