@@ -13,7 +13,9 @@ namespace Common.CoreUtil
     public class HttpClientUtil : IHttpClientUtil
     {
         private IHttpClientFactory _clientFactory { get; set; }
+
         private IMapUtil _mapUtil { get; set; }
+
         public HttpClientUtil(IHttpClientFactory clientFactory, IMapUtil mapUtil)
         {
             _clientFactory = clientFactory;
