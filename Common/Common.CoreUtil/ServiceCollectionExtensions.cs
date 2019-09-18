@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Common.Util;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,7 @@ namespace Common.CoreUtil
         /// <returns></returns>
         public static IServiceCollection AddHttpClientUtil(this IServiceCollection services)
         {
+            services.AddScoped<IMapUtil, MapUtil>();
             services.AddScoped<IHttpClientUtil, HttpClientUtil>();
             return services;
         }
