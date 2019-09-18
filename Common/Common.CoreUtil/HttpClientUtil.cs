@@ -169,7 +169,7 @@ namespace Common.CoreUtil
             }
         }
 
-        public async Task<HttpResult> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null, bool isParamConvertCookies = false)
+        public async Task<HttpResult> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) 
         {
             var request = new HttpRequestMessage(httpMethod, @url);
             if ((HttpMethod.Get.Equals(httpMethod)))
@@ -248,7 +248,7 @@ namespace Common.CoreUtil
             }
         }
 
-        public async Task<HttpResult> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null, bool isParamConvertCookies = false) 
+        public async Task<HttpResult> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) 
         {
             var httpMethod = new HttpMethod(httpMethodStr.ToUpper());
             var request = new HttpRequestMessage(httpMethod, @url);
