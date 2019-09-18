@@ -12,6 +12,18 @@ namespace Common.Util
 
         List<string> DynamicToStringList(dynamic obj);
 
+        /// <summary>
+        /// CookieDictionaryConvertToCookieStringList
+        /// </summary>
+        /// <param name="dict">CookieDictionary</param>
+        /// <returns></returns>
         List<string> DictionaryToStringList(IDictionary<string, string> dict);
+
+        /// <summary>
+        /// CookieDictionaryConvertToCookieStringList
+        /// </summary>
+        /// <param name="dict">CookieDictionary</param>
+        /// <returns></returns>
+        List<string> CookieDictToCookieStrList(IDictionary<string, string> dict);
     }
 }

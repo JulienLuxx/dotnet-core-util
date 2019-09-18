@@ -47,6 +47,7 @@ namespace Common.Util
             return dict;
         }
 
+
         public List<string> DynamicToStringList(dynamic obj)
         {
             var list = new List<string>();
@@ -67,7 +68,28 @@ namespace Common.Util
             return list;
         }
 
+        /// <summary>
+        /// CookieDictionaryConvertToCookieStringList
+        /// </summary>
+        /// <param name="dict">CookieDictionary</param>
+        /// <returns></returns>
         public List<string> DictionaryToStringList(IDictionary<string, string> dict)
+        {
+            var list = new List<string>();
+            foreach (var item in dict)
+            {
+                var str = item.Key + "=" + item.Value;
+                list.Add(str);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// CookieDictionaryConvertToCookieStringList
+        /// </summary>
+        /// <param name="dict">CookieDictionary</param>
+        /// <returns></returns>
+        public List<string> CookieDictToCookieStrList(IDictionary<string, string> dict)
         {
             var list = new List<string>();
             foreach (var item in dict)
