@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Net.Http;
 
 namespace Common.CoreUtil
 {
@@ -15,7 +17,14 @@ namespace Common.CoreUtil
         /// <returns></returns>
         public static IServiceCollection AddHttpClientUtil(this IServiceCollection services)
         {
-            services.AddScoped<IMapUtil, MapUtil>();
+            if (services.Where(x => x.ServiceType == typeof(IHttpClientFactory)).Any())
+            {
+                services.AddHttpClient();
+            }
+            if (services.Where(x => x.ServiceType == typeof(IMapUtil)).Any())
+            {
+                services.AddScoped<IMapUtil, MapUtil>();
+            }
             services.AddScoped<IHttpClientUtil, HttpClientUtil>();
             return services;
         }
