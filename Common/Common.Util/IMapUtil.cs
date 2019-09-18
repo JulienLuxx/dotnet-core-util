@@ -6,8 +6,18 @@ namespace Common.Util
 {
     public interface IMapUtil : IDependency
     {
+        /// <summary>
+        /// EntityObjectConvertToEntityDictionary
+        /// </summary>
+        /// <param name="obj">EntityObject</param>
+        /// <returns></returns>
         IDictionary<string, string> ObjectToDictionary(object obj);
 
+        /// <summary>
+        /// DynamicEntityObjectConvertToEntityDictionary
+        /// </summary>
+        /// <param name="obj">DynamicEntityObject</param>
+        /// <returns></returns>
         IDictionary<string, string> DynamicToDictionary(dynamic obj);
 
         List<string> DynamicToStringList(dynamic obj);

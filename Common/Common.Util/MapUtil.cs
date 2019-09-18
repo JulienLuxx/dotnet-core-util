@@ -7,6 +7,11 @@ namespace Common.Util
 {
     public class MapUtil : IMapUtil
     {
+        /// <summary>
+        /// EntityObjectConvertToEntityDictionary
+        /// </summary>
+        /// <param name="obj">EntityObject</param>
+        /// <returns></returns>
         public IDictionary<string, string> ObjectToDictionary(object obj)
         {
             IDictionary<string, string> dict = new Dictionary<string, string>();
@@ -27,6 +32,11 @@ namespace Common.Util
             return dict;
         }
 
+        /// <summary>
+        /// EntityObjectConvertToEntityDictionary
+        /// </summary>
+        /// <param name="obj">EntityObject</param>
+        /// <returns></returns>
         public IDictionary<string, string> DynamicToDictionary(dynamic obj)
         {
             IDictionary<string, string> dict = new Dictionary<string, string>();
