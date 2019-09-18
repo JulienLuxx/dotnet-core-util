@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Util;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.CoreUtil
 {
-    public interface IHttpClientUtil
+    public interface IHttpClientUtil: IDependency
     {
         /// <summary>
         /// AsyncSendPackage
