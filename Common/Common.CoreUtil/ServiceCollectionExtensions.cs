@@ -17,11 +17,11 @@ namespace Common.CoreUtil
         /// <returns></returns>
         public static IServiceCollection AddHttpClientUtil(this IServiceCollection services)
         {
-            if (services.Where(x => x.ServiceType == typeof(IHttpClientFactory)).Any())
+            if (!services.Where(x => x.ServiceType == typeof(IHttpClientFactory)).Any())
             {
                 services.AddHttpClient();
             }
-            if (services.Where(x => x.ServiceType == typeof(IMapUtil)).Any())
+            if (!services.Where(x => x.ServiceType == typeof(IMapUtil)).Any())
             {
                 services.AddScoped<IMapUtil, MapUtil>();
             }
