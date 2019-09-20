@@ -62,7 +62,33 @@ namespace Common.Util
         /// </summary>
         /// <param name="obj">DynamicEntityObject</param>
         /// <returns></returns>
+        [Obsolete]
         public List<string> DynamicToStringList(dynamic obj)
+        {
+            var list = new List<string>();
+            var type = obj.GetType();
+            var propertys = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in propertys)
+            {
+                var method = property.GetGetMethod();
+                if (null != method && method.IsPublic)
+                {
+                    if (null != property.GetValue(obj))
+                    {
+                        var str = property.Name + "=" + property.GetValue(obj).ToString();
+                        list.Add(str);
+                    }
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// DynamicEntityObjectConvertToCookieStringList
+        /// </summary>
+        /// <param name="obj">DynamicEntityObject</param>
+        /// <returns></returns>
+        public List<string> DynamicToCookieStrList(dynamic obj)
         {
             var list = new List<string>();
             var type = obj.GetType();
@@ -87,6 +113,7 @@ namespace Common.Util
         /// </summary>
         /// <param name="dict">CookieDictionary</param>
         /// <returns></returns>
+        [Obsolete]
         public List<string> DictionaryToStringList(IDictionary<string, string> dict)
         {
             var list = new List<string>();

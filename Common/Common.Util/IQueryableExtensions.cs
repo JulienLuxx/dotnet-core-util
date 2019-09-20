@@ -9,6 +9,14 @@ namespace Common.Util
 {
     public static class IQueryableExtensions
     {
+        /// <summary>
+        /// OrderByColumnName
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="source">IQueryableSource</param>
+        /// <param name="columnName">ColumnName</param>
+        /// <param name="isDesc">DESCorASC</param>
+        /// <returns></returns>
         public static IQueryable<TSource> OrderBy<TSource>(this IQueryable<TSource> source, string columnName, bool isDesc) where TSource : class
         {
             try

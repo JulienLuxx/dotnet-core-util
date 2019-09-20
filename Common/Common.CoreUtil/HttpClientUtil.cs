@@ -219,7 +219,7 @@ namespace Common.CoreUtil
             }
             else if (isParamConvertCookies)
             {
-                List<string> list = _mapUtil.DynamicToStringList(param);
+                List<string> list = _mapUtil.DynamicToCookieStrList(param);
                 request.Headers.Add("Set-Cookie", list);
             }
 
@@ -299,7 +299,7 @@ namespace Common.CoreUtil
             }
             else if (isParamConvertCookies)
             {
-                List<string> list = _mapUtil.DynamicToStringList(param);
+                List<string> list = _mapUtil.DynamicToCookieStrList(param);
                 request.Headers.Add("Set-Cookie", list);
             }
 
