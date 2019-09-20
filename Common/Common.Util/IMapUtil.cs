@@ -20,6 +20,11 @@ namespace Common.Util
         /// <returns></returns>
         IDictionary<string, string> DynamicToDictionary(dynamic obj);
 
+        /// <summary>
+        /// DynamicEntityObjectConvertToCookieStringList
+        /// </summary>
+        /// <param name="obj">DynamicEntityObject</param>
+        /// <returns></returns>
         List<string> DynamicToStringList(dynamic obj);
 
         /// <summary>

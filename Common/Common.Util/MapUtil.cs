@@ -57,7 +57,11 @@ namespace Common.Util
             return dict;
         }
 
-
+        /// <summary>
+        /// DynamicEntityObjectConvertToCookieStringList
+        /// </summary>
+        /// <param name="obj">DynamicEntityObject</param>
+        /// <returns></returns>
         public List<string> DynamicToStringList(dynamic obj)
         {
             var list = new List<string>();
