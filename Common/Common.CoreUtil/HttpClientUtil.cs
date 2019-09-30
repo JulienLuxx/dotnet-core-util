@@ -91,7 +91,7 @@ namespace Common.CoreUtil
             }
             else
             {
-                return new HttpResult(false);
+                return new HttpResult(response.StatusCode.ToString(), new List<string>(), false);
             }
         }
 
@@ -165,7 +165,7 @@ namespace Common.CoreUtil
             }
             else
             {
-                return new HttpResult(false);
+                return new HttpResult(response.StatusCode.ToString(), new List<string>(), false);
             }
         }
 
@@ -244,7 +244,7 @@ namespace Common.CoreUtil
             }
             else
             {
-                return new HttpResult(false);
+                return new HttpResult(response.StatusCode.ToString(), new List<string>(), false);
             }
         }
 
@@ -325,7 +325,7 @@ namespace Common.CoreUtil
             }
             else
             {
-                return new HttpResult(false);
+                return new HttpResult(response.StatusCode.ToString(), new List<string>(), false);
             }
         }
     }
