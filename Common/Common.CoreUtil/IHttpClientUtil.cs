@@ -58,5 +58,16 @@ namespace Common.CoreUtil
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
         Task<HttpResult> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null);
+
+        /// <summary>
+        /// AsyncSendPackage,GetResultInStream
+        /// </summary>
+        /// <param name="param">RequestParam</param>
+        /// <param name="url">RequestUrl</param>
+        /// <param name="httpMethodStr">RequestHttpMethodString(get)(Temporarily only supported Get)</param>
+        /// <param name="mediaType">RequestParamMediaType</param>
+        /// <param name="userAgent">RequestHeaderUserAgent</param>
+        /// <returns></returns>
+        Task<HttpStreamResult> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null);
     }
 }

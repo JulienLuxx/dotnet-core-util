@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -82,16 +83,16 @@ namespace Common.CoreUtil
                 var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
                 if (cookieFlag)
                 {
-                    return new HttpResult(result, setCookies.ToList(), true);
+                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), true);
+                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
                 }
             }
             else
             {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), false);
+                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
             }
         }
 
@@ -156,16 +157,16 @@ namespace Common.CoreUtil
                 var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
                 if (cookieFlag)
                 {
-                    return new HttpResult(result, setCookies.ToList(), true);
+                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), true);
+                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
                 }
             }
             else
             {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), false);
+                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
             }
         }
 
@@ -235,16 +236,16 @@ namespace Common.CoreUtil
                 var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
                 if (cookieFlag)
                 {
-                    return new HttpResult(result, setCookies.ToList(), true);
+                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), true);
+                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
                 }
             }
             else
             {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), false);
+                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
             }
         }
 
@@ -316,16 +317,70 @@ namespace Common.CoreUtil
                 var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
                 if (cookieFlag)
                 {
-                    return new HttpResult(result, setCookies.ToList(), true);
+                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), true);
+                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
                 }
             }
             else
             {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), false);
+                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+            }
+        }
+
+        public async Task<HttpStreamResult> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null)
+        {
+            httpMethodStr = httpMethodStr.ToUpper();
+            var httpMethod = new HttpMethod(httpMethodStr);
+            var paramDict = _mapUtil.DynamicToDictionary(param);
+            var request = new HttpRequestMessage(httpMethod, url);
+            if (HttpMethod.Get.Equals(httpMethod))
+            {
+                switch (mediaType)
+                {
+                    case MediaTypeEnum.UrlQuery:
+                        url = QueryHelpers.AddQueryString(url, paramDict);
+                        request.RequestUri = new Uri(url);
+                        break;
+                    case MediaTypeEnum.ApplicationFormUrlencoded:
+                        request.Content = new FormUrlEncodedContent(paramDict);
+                        break;
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            if (!string.IsNullOrEmpty(userAgent) && !string.IsNullOrWhiteSpace(userAgent))
+            {
+                request.Headers.UserAgent.ParseAdd(userAgent);
+            }
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var httpStream = await response.Content.ReadAsStreamAsync();
+                var memoryStream = new MemoryStream();
+                if (httpStream.Length > 0)
+                {
+                    using (httpStream)
+                    {
+                        await httpStream.CopyToAsync(memoryStream);
+                    }
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    return new HttpStreamResult(memoryStream, response.StatusCode, true);
+                }
+                else
+                {
+                    return new HttpStreamResult(null, response.StatusCode, false);
+                }
+
+            }
+            else
+            {
+                return new HttpStreamResult(null, response.StatusCode, false);
             }
         }
     }
