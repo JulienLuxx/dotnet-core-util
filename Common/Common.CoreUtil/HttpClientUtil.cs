@@ -349,6 +349,30 @@ namespace Common.CoreUtil
                         break;
                 }
             }
+            else if (HttpMethod.Post.Equals(httpMethod))
+            {
+                switch (mediaType)
+                {
+                    case MediaTypeEnum.UrlQuery:
+                        throw new NotImplementedException();
+                        break;
+                    case MediaTypeEnum.ApplicationFormUrlencoded:
+                        request.Content = new FormUrlEncodedContent(paramDict);
+                        break;
+                    case MediaTypeEnum.ApplicationJson:
+                        var jsonParam = JsonConvert.SerializeObject(param);
+                        request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
+                        break;
+                    case MediaTypeEnum.MultipartFormData:
+                        var content = new MultipartFormDataContent();
+                        foreach (var item in paramDict)
+                        {
+                            content.Add(new StringContent(item.Value), item.Key);
+                        }
+                        request.Content = content;
+                        break;
+                }
+            }
             else
             {
                 throw new NotImplementedException();
