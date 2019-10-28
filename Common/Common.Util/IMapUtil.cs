@@ -7,18 +7,26 @@ namespace Common.Util
     public interface IMapUtil : IDependency
     {
         /// <summary>
-        /// EntityObjectConvertToEntityDictionary
+        /// EntityObjectConvertToEntityDictionary(Suppot Use DescriptionAttribute)
         /// </summary>
         /// <param name="obj">EntityObject</param>
         /// <returns></returns>
         IDictionary<string, string> ObjectToDictionary(object obj);
 
         /// <summary>
-        /// DynamicEntityObjectConvertToEntityDictionary
+        /// DynamicEntityObjectConvertToEntityDictionary(Not Suppot Use DescriptionAttribute)
         /// </summary>
-        /// <param name="obj">DynamicEntityObject</param>
+        /// <param name="obj">DynamicEntity</param>
         /// <returns></returns>
         IDictionary<string, string> DynamicToDictionary(dynamic obj);
+
+        /// <summary>
+        /// EntityObjectConvertToEntityDictionary(Suppot Use DescriptionAttribute)
+        /// </summary>
+        /// <typeparam name="T">EntityObjectType</typeparam>
+        /// <param name="obj">EntityObject</param>
+        /// <returns></returns>
+        IDictionary<string, string> EntityToDictionary<T>(T obj) where T : class;
 
         /// <summary>
         /// DynamicEntityObjectConvertToCookieStringList
