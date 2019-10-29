@@ -31,12 +31,24 @@ namespace Common.XUnitTest
         [Fact]
         public void EntityToDictionaryTest()
         {
-            var qModel = new TestModel()
+            var model = new TestModel()
             {
                 Id = 10,
                 Name="Jack"
             };
-            var dict = _mapUtil.EntityToDictionary(qModel);
+            var dict = _mapUtil.EntityToDictionary(model);
+            Assert.Equal(dict["id"], 10.ToString());
+        }
+
+        [Fact]
+        public void ObjectToDictionaryTest()
+        {
+            var model = new TestModel()
+            {
+                Id = 10,
+                Name = "Jack"
+            };
+            var dict = _mapUtil.EntityToDictionary(model);
             Assert.Equal(dict["id"], 10.ToString());
         }
     }
