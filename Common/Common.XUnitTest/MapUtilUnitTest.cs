@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Common.XUnitTest
 {
@@ -50,6 +51,18 @@ namespace Common.XUnitTest
             };
             var dict = _mapUtil.EntityToDictionary(model);
             Assert.Equal(dict["id"], 10.ToString());
+        }
+
+        [Fact]
+        public void EntityToCookieStrListTest()
+        {
+            var model = new TestModel()
+            {
+                Id = 10,
+                Name = "Jack"
+            };
+            var list = _mapUtil.EntityToCookieStrList(model);
+            Assert.True(list.Where(x=>x.Contains("id")).Any());
         }
     }
 }
