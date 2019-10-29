@@ -37,11 +37,19 @@ namespace Common.Util
         List<string> DynamicToStringList(dynamic obj);
 
         /// <summary>
-        /// DynamicEntityObjectConvertToCookieStringList
+        /// DynamicEntityObjectConvertToCookieStringList(Not Suppot Use DescriptionAttribute)
         /// </summary>
         /// <param name="obj">DynamicEntityObject</param>
         /// <returns></returns>
         List<string> DynamicToCookieStrList(dynamic obj);
+
+        /// <summary>
+        /// EntityObjectConvertToCookieStringList(Suppot Use DescriptionAttribute)
+        /// </summary>
+        /// <typeparam name="T">EntityObjectType</typeparam>
+        /// <param name="obj">EntityObject</param>
+        /// <returns></returns>
+        List<string> EntityToCookieStrList<T>(T obj) where T : class;
 
         /// <summary>
         /// CookieDictionaryConvertToCookieStringList
