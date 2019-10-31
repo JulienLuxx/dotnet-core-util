@@ -74,25 +74,27 @@ namespace Common.CoreUtil
             if (!string.IsNullOrEmpty(userAgent) && !string.IsNullOrWhiteSpace(userAgent))
             {
                 request.Headers.UserAgent.ParseAdd(userAgent);
-            }
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            }            
+            using (var client = _clientFactory.CreateClient())
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
-                if (cookieFlag)
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
                 {
-                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    var result = await response.Content.ReadAsStringAsync();
+                    var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
+                    if (cookieFlag)
+                    {
+                        return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    }
+                    else
+                    {
+                        return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    }
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                 }
-            }
-            else
-            {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
             }
         }
 
@@ -149,24 +151,26 @@ namespace Common.CoreUtil
             {
                 request.Headers.UserAgent.ParseAdd(userAgent);
             }
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            using (var client = _clientFactory.CreateClient())
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
-                if (cookieFlag)
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
                 {
-                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    var result = await response.Content.ReadAsStringAsync();
+                    var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
+                    if (cookieFlag)
+                    {
+                        return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    }
+                    else
+                    {
+                        return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    }
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                 }
-            }
-            else
-            {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
             }
         }
 
@@ -223,24 +227,26 @@ namespace Common.CoreUtil
             {
                 request.Headers.UserAgent.ParseAdd(userAgent);
             }
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            using (var client = _clientFactory.CreateClient())
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
-                if (cookieFlag)
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
                 {
-                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    var result = await response.Content.ReadAsStringAsync();
+                    var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
+                    if (cookieFlag)
+                    {
+                        return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    }
+                    else
+                    {
+                        return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    }
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                 }
-            }
-            else
-            {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
             }
         }
 
@@ -302,25 +308,28 @@ namespace Common.CoreUtil
             {
                 request.Headers.UserAgent.ParseAdd(userAgent);
             }
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            using (var client = _clientFactory.CreateClient())
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
-                if (cookieFlag)
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
                 {
-                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    var result = await response.Content.ReadAsStringAsync();
+                    var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
+                    if (cookieFlag)
+                    {
+                        return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    }
+                    else
+                    {
+                        return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    }
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                 }
             }
-            else
-            {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
-            }
+
         }
 
         public async Task<HttpResult> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) 
@@ -383,24 +392,26 @@ namespace Common.CoreUtil
             {
                 request.Headers.UserAgent.ParseAdd(userAgent);
             }
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            using (var client = _clientFactory.CreateClient())
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
-                if (cookieFlag)
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
                 {
-                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    var result = await response.Content.ReadAsStringAsync();
+                    var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
+                    if (cookieFlag)
+                    {
+                        return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    }
+                    else
+                    {
+                        return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    }
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                 }
-            }
-            else
-            {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
             }
         }
 
@@ -464,24 +475,26 @@ namespace Common.CoreUtil
             {
                 request.Headers.UserAgent.ParseAdd(userAgent);
             }
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            using (var client = _clientFactory.CreateClient())
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
-                if (cookieFlag)
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
                 {
-                    return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    var result = await response.Content.ReadAsStringAsync();
+                    var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
+                    if (cookieFlag)
+                    {
+                        return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                    }
+                    else
+                    {
+                        return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    }
                 }
                 else
                 {
-                    return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                    return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                 }
-            }
-            else
-            {
-                return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
             }
         }
 
@@ -533,30 +546,32 @@ namespace Common.CoreUtil
             {
                 request.Headers.UserAgent.ParseAdd(userAgent);
             }
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            using (var client = _clientFactory.CreateClient())
             {
-                var httpStream = await response.Content.ReadAsStreamAsync();
-                var memoryStream = new MemoryStream();
-                if (httpStream.Length > 0)
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
                 {
-                    using (httpStream)
+                    var httpStream = await response.Content.ReadAsStreamAsync();
+                    var memoryStream = new MemoryStream();
+                    if (httpStream.Length > 0)
                     {
-                        await httpStream.CopyToAsync(memoryStream);
+                        using (httpStream)
+                        {
+                            await httpStream.CopyToAsync(memoryStream);
+                        }
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        return new HttpStreamResult(memoryStream, response.StatusCode, true);
                     }
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-                    return new HttpStreamResult(memoryStream, response.StatusCode, true);
+                    else
+                    {
+                        return new HttpStreamResult(null, response.StatusCode, false);
+                    }
+
                 }
                 else
                 {
                     return new HttpStreamResult(null, response.StatusCode, false);
                 }
-
-            }
-            else
-            {
-                return new HttpStreamResult(null, response.StatusCode, false);
             }
         }
 
@@ -608,30 +623,32 @@ namespace Common.CoreUtil
             {
                 request.Headers.UserAgent.ParseAdd(userAgent);
             }
-            var client = _clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            using (var client = _clientFactory.CreateClient())
             {
-                var httpStream = await response.Content.ReadAsStreamAsync();
-                var memoryStream = new MemoryStream();
-                if (httpStream.Length > 0)
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
                 {
-                    using (httpStream)
+                    var httpStream = await response.Content.ReadAsStreamAsync();
+                    var memoryStream = new MemoryStream();
+                    if (httpStream.Length > 0)
                     {
-                        await httpStream.CopyToAsync(memoryStream);
+                        using (httpStream)
+                        {
+                            await httpStream.CopyToAsync(memoryStream);
+                        }
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        return new HttpStreamResult(memoryStream, response.StatusCode, true);
                     }
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-                    return new HttpStreamResult(memoryStream, response.StatusCode, true);
+                    else
+                    {
+                        return new HttpStreamResult(null, response.StatusCode, false);
+                    }
+
                 }
                 else
                 {
                     return new HttpStreamResult(null, response.StatusCode, false);
                 }
-
-            }
-            else
-            {
-                return new HttpStreamResult(null, response.StatusCode, false);
             }
         }
     }
