@@ -41,11 +41,12 @@ namespace Common.CoreUtil
         /// <param name="url">RequestUrl</param>
         /// <param name="httpMethodStr">RequestHttpMethodString(get/post)</param>
         /// <param name="mediaType">RequestParamMediaType</param>
+        /// <param name="encoding">RequestResultStringEncoding(DefaultValueNull),If null default use ResponseHeader Charset</param>
         /// <param name="cookieList">RequestCookieStringList</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null) where T : class;
-
+        Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, Encoding encoding = null, List<string> cookieList = null, string userAgent = null) where T : class;
+        
         /// <summary>
         /// AsyncSendPackage(Not suppot use DescriptionAttribute in param)
         /// </summary>

@@ -174,7 +174,7 @@ namespace Common.CoreUtil
             }
         }
 
-        public async Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null) where T : class 
+        public async Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, Encoding encoding = null, List<string> cookieList = null, string userAgent = null) where T : class 
         {
             var httpMethod = new HttpMethod(httpMethodStr.ToUpper());
             var request = new HttpRequestMessage(httpMethod, @url);
@@ -191,7 +191,6 @@ namespace Common.CoreUtil
                         request.Content = new FormUrlEncodedContent(dict);
                         break;
                 }
-
             }
             else if (HttpMethod.Post.Equals(httpMethod))
             {
@@ -232,16 +231,45 @@ namespace Common.CoreUtil
                 var response = await client.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsStringAsync();
                     var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
-                    if (cookieFlag)
+                    if (response.Content.Headers.ContentLength.HasValue)
                     {
-                        return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                        if (response.Content.Headers.ContentLength < 81920)
+                        {
+                            var result = await response.Content.ReadAsStringAsync();
+                            return new HttpResult(result, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                        }
+                        else
+                        {
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                var charSet = response.Content.Headers.ContentType.CharSet;
+                                if (null == encoding)
+                                {
+                                    if (string.IsNullOrEmpty(charSet))
+                                    {
+                                        encoding = Encoding.Default;
+                                    }
+                                    else
+                                    {
+                                        encoding = Encoding.GetEncoding(charSet);
+                                    }
+                                }
+                                await response.Content.CopyToAsync(memoryStream);
+                                memoryStream.Seek(0, SeekOrigin.Begin);
+                                //var byteArray = new byte[memoryStream.Length];
+                                //await memoryStream.ReadAsync(byteArray, 0, byteArray.Length);
+                                var byteArray = memoryStream.GetBuffer();
+                                var resultStr = encoding.GetString(byteArray);
+                                return new HttpResult(resultStr, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                            }
+                        }
                     }
                     else
                     {
-                        return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                        return new HttpResult(string.Empty, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
                     }
+
                 }
                 else
                 {
