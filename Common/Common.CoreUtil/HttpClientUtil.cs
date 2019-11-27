@@ -177,105 +177,110 @@ namespace Common.CoreUtil
         public async Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, Encoding encoding = null, List<string> cookieList = null, string userAgent = null) where T : class 
         {
             var httpMethod = new HttpMethod(httpMethodStr.ToUpper());
-            var request = new HttpRequestMessage(httpMethod, @url);
-            if ((HttpMethod.Get.Equals(httpMethod)))
+            using(var request = new HttpRequestMessage(httpMethod, @url))
             {
-                var dict = _mapUtil.EntityToDictionary(param);
-                switch (mediaType)
+                if ((HttpMethod.Get.Equals(httpMethod)))
                 {
-                    case MediaTypeEnum.UrlQuery:
-                        var paramUrl = QueryHelpers.AddQueryString(@url, dict);
-                        request.RequestUri = new Uri(paramUrl);
-                        break;
-                    case MediaTypeEnum.ApplicationFormUrlencoded:
-                        request.Content = new FormUrlEncodedContent(dict);
-                        break;
-                }
-            }
-            else if (HttpMethod.Post.Equals(httpMethod))
-            {
-                var dict = _mapUtil.EntityToDictionary(param);
-                switch (mediaType)
-                {
-                    case MediaTypeEnum.ApplicationFormUrlencoded:
-                        request.Content = new FormUrlEncodedContent(dict);
-                        break;
-                    case MediaTypeEnum.ApplicationJson:
-                        var jsonParam = JsonConvert.SerializeObject(param);
-                        request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
-                        break;
-                    case MediaTypeEnum.MultipartFormData:
-                        var content = new MultipartFormDataContent();
-                        foreach (var item in dict)
-                        {
-                            content.Add(new StringContent(item.Value), item.Key);
-                        }
-                        request.Content = content;
-                        break;
-                }
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-            if (null != cookieList && cookieList.Any())
-            {
-                request.Headers.Add("Set-Cookie", cookieList);
-            }
-            if (!string.IsNullOrEmpty(userAgent) && !string.IsNullOrWhiteSpace(userAgent))
-            {
-                request.Headers.UserAgent.ParseAdd(userAgent);
-            }
-            using (var client = _clientFactory.CreateClient())
-            {
-                var response = await client.SendAsync(request);
-                if (response.IsSuccessStatusCode)
-                {
-                    var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
-                    if (response.Content.Headers.ContentLength.HasValue)
+                    var dict = _mapUtil.EntityToDictionary(param);
+                    switch (mediaType)
                     {
-                        if (response.Content.Headers.ContentLength < 81920)
-                        {
-                            var result = await response.Content.ReadAsStringAsync();
-                            return new HttpResult(result, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
-                        }
-                        else
-                        {
-                            using (var memoryStream = new MemoryStream())
+                        case MediaTypeEnum.UrlQuery:
+                            var paramUrl = QueryHelpers.AddQueryString(@url, dict);
+                            request.RequestUri = new Uri(paramUrl);
+                            break;
+                        case MediaTypeEnum.ApplicationFormUrlencoded:
+                            request.Content = new FormUrlEncodedContent(dict);
+                            break;
+                    }
+                }
+                else if (HttpMethod.Post.Equals(httpMethod))
+                {
+                    var dict = _mapUtil.EntityToDictionary(param);
+                    switch (mediaType)
+                    {
+                        case MediaTypeEnum.ApplicationFormUrlencoded:
+                            request.Content = new FormUrlEncodedContent(dict);
+                            break;
+                        case MediaTypeEnum.ApplicationJson:
+                            var jsonParam = JsonConvert.SerializeObject(param);
+                            request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
+                            break;
+                        case MediaTypeEnum.MultipartFormData:
+                            var content = new MultipartFormDataContent();
+                            foreach (var item in dict)
                             {
-                                var charSet = response.Content.Headers.ContentType.CharSet;
-                                if (null == encoding)
-                                {
-                                    if (string.IsNullOrEmpty(charSet))
-                                    {
-                                        encoding = Encoding.Default;
-                                    }
-                                    else
-                                    {
-                                        encoding = Encoding.GetEncoding(charSet);
-                                    }
-                                }
-                                await response.Content.CopyToAsync(memoryStream);
-                                memoryStream.Seek(0, SeekOrigin.Begin);
-                                //var byteArray = new byte[memoryStream.Length];
-                                //await memoryStream.ReadAsync(byteArray, 0, byteArray.Length);
-                                var byteArray = memoryStream.GetBuffer();
-                                var resultStr = encoding.GetString(byteArray);
-                                return new HttpResult(resultStr, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                content.Add(new StringContent(item.Value), item.Key);
                             }
-                        }
+                            request.Content = content;
+                            break;
                     }
-                    else
-                    {
-                        return new HttpResult(string.Empty, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
-                    }
-
                 }
                 else
                 {
-                    return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                    throw new NotImplementedException();
+                }
+                if (null != cookieList && cookieList.Any())
+                {
+                    request.Headers.Add("Set-Cookie", cookieList);
+                }
+                if (!string.IsNullOrEmpty(userAgent) && !string.IsNullOrWhiteSpace(userAgent))
+                {
+                    request.Headers.UserAgent.ParseAdd(userAgent);
+                }
+                using (var client = _clientFactory.CreateClient())
+                {
+                    using(var response = await client.SendAsync(request))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
+                            if (response.Content.Headers.ContentLength.HasValue)
+                            {
+                                if (response.Content.Headers.ContentLength < 81920)
+                                {
+                                    var result = await response.Content.ReadAsStringAsync();
+                                    return new HttpResult(result, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                }
+                                else
+                                {
+                                    using (var memoryStream = new MemoryStream())
+                                    {
+                                        var charSet = response.Content.Headers.ContentType.CharSet;
+                                        if (null == encoding)
+                                        {
+                                            if (string.IsNullOrEmpty(charSet))
+                                            {
+                                                encoding = Encoding.Default;
+                                            }
+                                            else
+                                            {
+                                                encoding = Encoding.GetEncoding(charSet);
+                                            }
+                                        }
+                                        await response.Content.CopyToAsync(memoryStream);
+                                        memoryStream.Seek(0, SeekOrigin.Begin);
+                                        //var byteArray = new byte[memoryStream.Length];
+                                        //await memoryStream.ReadAsync(byteArray, 0, byteArray.Length);
+                                        var byteArray = memoryStream.GetBuffer();
+                                        var resultStr = encoding.GetString(byteArray);
+                                        return new HttpResult(resultStr, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return new HttpResult(string.Empty, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                            }
+
+                        }
+                        else
+                        {
+                            return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                        }
+                    }
                 }
             }
+
         }
 
         public async Task<HttpResult> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) 
