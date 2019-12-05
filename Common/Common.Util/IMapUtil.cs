@@ -29,12 +29,11 @@ namespace Common.Util
         IDictionary<string, string> EntityToDictionary<T>(T obj) where T : class;
 
         /// <summary>
-        /// GetEntityPropertyNameStringList
+        /// GetEntityClassAllPropertyNames
         /// </summary>
-        /// <typeparam name="T">EntityObjectType</typeparam>
-        /// <param name="obj">EntityObject</param>
-        /// <param name="list"></param>
-        void GetEntityPropertyNames<T>(T obj, ref List<string> list) where T : class;
+        /// <param name="type">EntityClassType</param>
+        /// <returns></returns>
+        Span<string> GetAllPropertyNames(Type type);
 
         /// <summary>
         /// DynamicEntityObjectConvertToCookieStringList

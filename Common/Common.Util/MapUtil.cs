@@ -101,29 +101,23 @@ namespace Common.Util
             return dict;
         }
 
-        public void GetEntityPropertyNames<T>(T obj, ref List<string> list) where T : class 
+        public Span<string> GetAllPropertyNames(Type type)
         {
-            var type = obj.GetType();
-            var propertys = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var property in propertys)
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => null != x.GetGetMethod() & x.GetGetMethod().IsPublic);
+            var list = new List<string>();
+            foreach (var property in properties)
             {
-                var method = property.GetGetMethod();
-                if (null != method && method.IsPublic)
+                var description = property.CustomAttributes.Where(x => x.AttributeType.Equals(typeof(DescriptionAttribute))).Select(s => s.ConstructorArguments.FirstOrDefault()).FirstOrDefault();
+                if (null != description.Value)
                 {
-                    if (null != property.GetValue(obj))
-                    {
-                        var description = property.CustomAttributes.Where(x => x.AttributeType.Equals(typeof(DescriptionAttribute))).Select(s => s.ConstructorArguments.FirstOrDefault()).FirstOrDefault();
-                        if (null != description.Value)
-                        {
-                            list.Add(description.Value.ToString());
-                        }
-                        else
-                        {
-                            list.Add(property.Name);
-                        }
-                    }
+                    list.Add(description.Value.ToString());
+                }
+                else
+                {
+                    list.Add(property.Name);
                 }
             }
+            return list.ToArray().AsSpan();
         }
 
         /// <summary>

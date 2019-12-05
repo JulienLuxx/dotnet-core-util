@@ -11,10 +11,10 @@ namespace Common.XUnitTest
 {
     public class TestModel
     {
-        [Description("id")]
+        //[Description("id")]
         public int Id { get; set; }
 
-        [Description("name")]
+        //[Description("name")]
         public string Name { get; set; }
     }
 
@@ -63,6 +63,13 @@ namespace Common.XUnitTest
             };
             var list = _mapUtil.EntityToCookieStrList(model);
             Assert.True(list.Where(x=>x.Contains("id")).Any());
+        }
+
+        [Fact]
+        public void GetAllPropertyNamesTest()
+        {
+            var s = _mapUtil.GetAllPropertyNames(typeof(TestModel));
+            Assert.Equal(2, s.Length);
         }
     }
 }
