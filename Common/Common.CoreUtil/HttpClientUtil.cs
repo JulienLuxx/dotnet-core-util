@@ -551,7 +551,7 @@ namespace Common.CoreUtil
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
             var paramDict = _mapUtil.DynamicToDictionary(param);
-            using (var request = new HttpRequestMessage(httpMethod, url))
+            using (var request = new HttpRequestMessage(httpMethod, @url))
             {
                 if (HttpMethod.Get.Equals(httpMethod))
                 {
@@ -628,7 +628,7 @@ namespace Common.CoreUtil
         {
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
-            var paramDict = _mapUtil.DynamicToDictionary(param);
+            var paramDict = _mapUtil.EntityToDictionary(param);
             using (var request = new HttpRequestMessage(httpMethod, url))
             {
                 if (HttpMethod.Get.Equals(httpMethod))
