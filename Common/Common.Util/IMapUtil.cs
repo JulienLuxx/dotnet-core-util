@@ -29,11 +29,18 @@ namespace Common.Util
         IDictionary<string, string> EntityToDictionary<T>(T obj) where T : class;
 
         /// <summary>
-        /// GetEntityClassAllPropertyNames
+        /// GetEntityClassAllPropertyNames(Not Support Async/Await)
         /// </summary>
         /// <param name="type">EntityClassType</param>
         /// <returns></returns>
         Span<string> GetAllPropertyNames(Type type);
+
+        /// <summary>
+        /// GetEntityClassAllPropertyNames(Support Async/Await)
+        /// </summary>
+        /// <param name="type">EntityClassType</param>
+        /// <returns></returns>
+        Memory<string> GetAllPropertyName(Type type);
 
         /// <summary>
         /// DynamicEntityObjectConvertToCookieStringList

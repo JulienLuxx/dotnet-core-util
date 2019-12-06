@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Common.XUnitTest
 {
@@ -69,6 +70,13 @@ namespace Common.XUnitTest
         public void GetAllPropertyNamesTest()
         {
             var s = _mapUtil.GetAllPropertyNames(typeof(TestModel));
+            Assert.Equal(2, s.Length);
+        }
+
+        [Fact]
+        public async Task GetAllPropertyNameTest()
+        {
+            var s = _mapUtil.GetAllPropertyName(typeof(TestModel));
             Assert.Equal(2, s.Length);
         }
     }

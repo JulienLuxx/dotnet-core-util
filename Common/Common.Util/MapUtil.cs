@@ -120,6 +120,25 @@ namespace Common.Util
             return list.ToArray().AsSpan();
         }
 
+        public Memory<string> GetAllPropertyName(Type type)
+        {
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => null != x.GetGetMethod() & x.GetGetMethod().IsPublic);
+            var list = new List<string>();
+            foreach (var property in properties)
+            {
+                var description = property.CustomAttributes.Where(x => x.AttributeType.Equals(typeof(DescriptionAttribute))).Select(s => s.ConstructorArguments.FirstOrDefault()).FirstOrDefault();
+                if (null != description.Value)
+                {
+                    list.Add(description.Value.ToString());
+                }
+                else
+                {
+                    list.Add(property.Name);
+                }
+            }
+            return list.ToArray().AsMemory();
+        }
+
         /// <summary>
         /// DynamicEntityObjectConvertToCookieStringList
         /// </summary>
