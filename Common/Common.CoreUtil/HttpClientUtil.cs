@@ -525,8 +525,9 @@ namespace Common.CoreUtil
                     {
                         if (response.IsSuccessStatusCode)
                         {
-                            var result = await response.Content.ReadAsStringAsync();
                             var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
+                            var result = await response.Content.ReadAsStringAsync();
+
                             if (cookieFlag)
                             {
                                 return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
