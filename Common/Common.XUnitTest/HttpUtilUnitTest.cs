@@ -46,6 +46,7 @@ namespace Common.XUnitTest
             var httpResult = await _httpClientUtil.GetStreamAsync(new {q="release" }, @"https://cn.bing.com/dict/search", "GET", MediaTypeEnum.UrlQuery);
             var fileStream = new FileStream(@"D:\doc\233.txt", FileMode.Create);
             await httpResult.Stream.CopyToAsync(fileStream);
+            httpResult.Stream.Dispose();
             fileStream.Close();
             Assert.True(true);
         }

@@ -23,11 +23,15 @@ namespace Common.XUnitTest
     {
         private IMapUtil _mapUtil { get; set; }
 
+        private IEncryptUtil _encryptUtil { get; set; }
+
         public MapUtilUnitTest() : base() 
         {
             _serviceCollection.AddMapUtil();
+            _serviceCollection.AddEncryptUtil();
             BuilderServiceProvider();
             _mapUtil = _serviceProvider.GetService<IMapUtil>();
+            _encryptUtil = _serviceProvider.GetService<IEncryptUtil>();
         }
 
         [Fact]
@@ -78,6 +82,13 @@ namespace Common.XUnitTest
         {
             var s = _mapUtil.GetAllPropertyName(typeof(TestModel));
             Assert.Equal(2, s.Length);
+        }
+
+        [Fact]
+        public void GetMd5By32Test()
+        {
+            var v = _encryptUtil.GetMd5By32(@"123456{1#2$3%4(5)6@7!poeeww$3%4(5)djjkkldss}").ToLower();
+            Assert.True(true);
         }
     }
 }
