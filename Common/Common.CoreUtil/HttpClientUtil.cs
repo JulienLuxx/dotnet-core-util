@@ -602,17 +602,15 @@ namespace Common.CoreUtil
                     {
                         if (response.IsSuccessStatusCode)
                         {
-                            using (var memoryStream = new MemoryStream())
+                            var memoryStream = new MemoryStream();
+                            await response.Content.CopyToAsync(memoryStream);
+                            if (memoryStream.Length > 0)
                             {
-                                await response.Content.CopyToAsync(memoryStream);
-                                if (memoryStream.Length > 0)
-                                {
-                                    return new HttpStreamResult(memoryStream, response.StatusCode, true);
-                                }
-                                else
-                                {
-                                    return new HttpStreamResult(null, response.StatusCode, false);
-                                }
+                                return new HttpStreamResult(memoryStream, response.StatusCode, true);
+                            }
+                            else
+                            {
+                                return new HttpStreamResult(null, response.StatusCode, false);
                             }
                         }
                         else
@@ -680,17 +678,15 @@ namespace Common.CoreUtil
                     {
                         if (response.IsSuccessStatusCode)
                         {
-                            using (var memoryStream = new MemoryStream())
+                            var memoryStream = new MemoryStream();
+                            await response.Content.CopyToAsync(memoryStream);
+                            if (memoryStream.Length > 0)
                             {
-                                await response.Content.CopyToAsync(memoryStream);
-                                if (memoryStream.Length > 0)
-                                {
-                                    return new HttpStreamResult(memoryStream, response.StatusCode, true);
-                                }
-                                else
-                                {
-                                    return new HttpStreamResult(null, response.StatusCode, false);
-                                }
+                                return new HttpStreamResult(memoryStream, response.StatusCode, true);
+                            }
+                            else
+                            {
+                                return new HttpStreamResult(null, response.StatusCode, false);
                             }
                         }
                         else

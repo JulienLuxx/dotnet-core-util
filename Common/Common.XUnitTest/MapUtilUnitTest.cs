@@ -74,7 +74,7 @@ namespace Common.XUnitTest
         }
 
         [Fact]
-        public async Task GetAllPropertyNameTest()
+        public void GetAllPropertyNameTest()
         {
             var s = _mapUtil.GetAllPropertyName(typeof(TestModel));
             Assert.Equal(2, s.Length);
