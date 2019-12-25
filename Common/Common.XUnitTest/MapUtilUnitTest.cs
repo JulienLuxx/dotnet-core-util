@@ -33,10 +33,10 @@ namespace Common.XUnitTest
         [Fact]
         public void EntityToDictionaryTest()
         {
-            var model = new TestModel()
+            var model = new 
             {
-                Id = 10,
-                Name="Jack"
+                id = 10,
+                name="Jack"
             };
             var dict = _mapUtil.EntityToDictionary(model);
             Assert.Equal(dict["id"], 10.ToString());
