@@ -15,7 +15,7 @@ namespace Common.XUnitTest
             _serviceCollection = new ServiceCollection();
         }
 
-        protected void BuilderServiceProvider()
+        protected virtual void BuilderServiceProvider()
         {
             _serviceProvider = _serviceCollection.BuildServiceProvider();
         }
