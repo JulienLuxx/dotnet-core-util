@@ -604,6 +604,7 @@ namespace Common.CoreUtil
                         {
                             var memoryStream = new MemoryStream();
                             await response.Content.CopyToAsync(memoryStream);
+                            memoryStream.Seek(0, SeekOrigin.Begin);
                             if (memoryStream.Length > 0)
                             {
                                 return new HttpStreamResult(memoryStream, response.StatusCode, true);
@@ -628,6 +629,7 @@ namespace Common.CoreUtil
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
             var paramDict = _mapUtil.EntityToDictionary(param);
+            var memoryStream = new MemoryStream();
             using (var request = new HttpRequestMessage(httpMethod, url))
             {
                 if (HttpMethod.Get.Equals(httpMethod))
@@ -677,20 +679,22 @@ namespace Common.CoreUtil
                     using (var response = await client.SendAsync(request))
                     {
                         if (response.IsSuccessStatusCode)
-                        {
-                            var memoryStream = new MemoryStream();
+                        {                            
                             await response.Content.CopyToAsync(memoryStream);
+                            memoryStream.Seek(0, SeekOrigin.Begin);
                             if (memoryStream.Length > 0)
-                            {
+                            {                                
                                 return new HttpStreamResult(memoryStream, response.StatusCode, true);
                             }
                             else
                             {
+                                memoryStream.Dispose();
                                 return new HttpStreamResult(null, response.StatusCode, false);
                             }
                         }
                         else
                         {
+                            memoryStream.Dispose();
                             return new HttpStreamResult(null, response.StatusCode, false);
                         }
                     }
