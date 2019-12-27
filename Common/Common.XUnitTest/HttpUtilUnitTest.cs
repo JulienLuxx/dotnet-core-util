@@ -26,6 +26,11 @@ namespace Common.XUnitTest
             return File.ReadAllText("C:/Users/Julien/Desktop/esjson.txt", Encoding.GetEncoding("GB2312"));
         }
 
+        public dynamic GetJson2()
+        {
+            return File.ReadAllText("C:/Users/Julien/Desktop/t.txt");
+        }
+
         public async Task<HttpResult> SendAsyncGeneric()
         {
             string json = @GetJson();
@@ -33,10 +38,17 @@ namespace Common.XUnitTest
             return httpResult;
         }
 
+        public async Task<HttpResult> SendAsync2()
+        {
+            var json = GetJson2();
+            var httpResult = await _httpClientUtil.SendAsync(new { d = json }, @"http://localhost:5000/DAQManage?c=UpdateUserCenterData", "POST", MediaTypeEnum.ApplicationFormUrlencoded);
+            return httpResult;
+        }
+
         [Fact]
         public async Task SendAsyncGenericTest()
         {
-            var result = await SendAsyncGeneric();
+            var result = await SendAsync2();
             Assert.True(result.IsSuccess);
         }
 
