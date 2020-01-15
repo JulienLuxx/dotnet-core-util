@@ -467,7 +467,7 @@ namespace Common.CoreUtil
             {
                 if ((HttpMethod.Get.Equals(httpMethod)))
                 {
-                    var dict = _mapUtil.EntityToDictionary(param);
+                    var dict = _mapUtil.DynamicToDictionary(param);
                     switch (mediaType)
                     {
                         case MediaTypeEnum.UrlQuery:
@@ -482,7 +482,7 @@ namespace Common.CoreUtil
                 }
                 else if (HttpMethod.Post.Equals(httpMethod))
                 {
-                    var dict = _mapUtil.EntityToDictionary(param);
+                    var dict = _mapUtil.DynamicToDictionary(param);
                     switch (mediaType)
                     {
                         case MediaTypeEnum.ApplicationFormUrlencoded:
