@@ -101,6 +101,40 @@ namespace Common.Util
             return dict;
         }
 
+        /// <summary>
+        /// EntityObjectConvertToEntityDictionary(Suppot Use DescriptionAttribute)
+        /// </summary>
+        /// <typeparam name="T">EntityClassOrStructType</typeparam>
+        /// <param name="obj">EntityClassOrStruct</param>
+        /// <returns></returns>
+        public IDictionary<string, string> DynamicToDictionary<T>(T obj)
+        {
+            IDictionary<string, string> dict = new Dictionary<string, string>();
+
+            var type = obj.GetType();
+            var propertys = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in propertys)
+            {
+                var method = property.GetGetMethod();
+                if (null != method && method.IsPublic)
+                {
+                    if (null != property.GetValue(obj))
+                    {
+                        var description = property.CustomAttributes.Where(x => x.AttributeType.Equals(typeof(DescriptionAttribute))).Select(s => s.ConstructorArguments.FirstOrDefault()).FirstOrDefault();
+                        if (null != description.Value)
+                        {
+                            dict.Add(description.Value.ToString(), property.GetValue(obj).ToString());
+                        }
+                        else
+                        {
+                            dict.Add(property.Name, property.GetValue(obj).ToString());
+                        }
+                    }
+                }
+            }
+            return dict;
+        }
+
         public Span<string> GetAllPropertyNames(Type type)
         {
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => null != x.GetGetMethod() & x.GetGetMethod().IsPublic);

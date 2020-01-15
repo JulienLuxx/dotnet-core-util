@@ -29,6 +29,14 @@ namespace Common.Util
         IDictionary<string, string> EntityToDictionary<T>(T obj) where T : class;
 
         /// <summary>
+        /// EntityObjectConvertToEntityDictionary(Suppot Use DescriptionAttribute)
+        /// </summary>
+        /// <typeparam name="T">EntityClassOrStructType</typeparam>
+        /// <param name="obj">EntityClassOrStruct</param>
+        /// <returns></returns>
+        IDictionary<string, string> DynamicToDictionary<T>(T obj);
+
+        /// <summary>
         /// GetEntityClassAllPropertyNames(Not Support Async/Await)
         /// </summary>
         /// <param name="type">EntityClassType</param>

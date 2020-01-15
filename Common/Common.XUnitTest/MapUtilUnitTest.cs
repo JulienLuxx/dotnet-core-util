@@ -19,11 +19,18 @@ namespace Common.XUnitTest
         public string Name { get; set; }
     }
 
+    public struct TestModel2
+    {
+        [Description("id")]
+        public int Id { get; set; }
+
+        [Description("name")]
+        public string Name { get; set; }
+    }
+
     public class MapUtilUnitTest : BaseUnitTest
     {
         private IMapUtil _mapUtil { get; set; }
-
-
 
         public MapUtilUnitTest() : base() 
         {
@@ -56,6 +63,19 @@ namespace Common.XUnitTest
             };
             var dict = _mapUtil.EntityToDictionary(model);
             Assert.Equal(dict["id"], 10.ToString());
+        }
+
+        [Fact]
+        public void DynamicToDictionaryTest()
+        {
+            var model = new TestModel2()
+            {
+                Id = 10,
+                Name = "Jack"
+            };
+            var dict = _mapUtil.DynamicToDictionary(model);
+            dict.TryGetValue("id", out var values);
+            Assert.Equal(values, 10.ToString());
         }
 
         [Fact]
