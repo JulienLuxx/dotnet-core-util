@@ -24,5 +24,12 @@ namespace Common.XUnitTest
             var value = _encryptUtil.GetMd5By32(@"123456{1#2$3%4(5)6@7!poeeww$3%4(5)djjkkldss}").ToLower();
             Assert.True(!string.IsNullOrEmpty(value));
         }
+
+        [Fact]
+        public void GetLongByGuidTest()
+        {
+            _encryptUtil.GetLongByGuid(out var num);
+            Assert.True(num > 0);
+        }
     }
 }
