@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -65,6 +66,21 @@ namespace Common.CoreUtil
         {
             Result = result;
             Cookies = cookies;
+            ResultCode = resultCode;
+            IsSuccess = isSuccess;
+        }
+
+        /// <summary>
+        ///  Ctor
+        /// </summary>
+        /// <param name="result">ResponseContentString</param>
+        /// <param name="cookieArray">ResponseCookies</param>
+        /// <param name="resultCode">ResultStatusCode</param>
+        /// <param name="isSuccess">IsResponseSuccess</param>
+        public HttpResult(string result, string[] cookieArray, HttpStatusCode resultCode, bool isSuccess)
+        {
+            Result = result;
+            Cookies = cookieArray.ToList();
             ResultCode = resultCode;
             IsSuccess = isSuccess;
         }

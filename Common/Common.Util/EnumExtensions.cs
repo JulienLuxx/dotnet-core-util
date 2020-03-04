@@ -9,6 +9,11 @@ namespace Common.Util
 {
     public static class EnumExtensions
     {
+        /// <summary>
+        /// GetEnumDescriptionAttributeString
+        /// </summary>
+        /// <param name="instance">EnumObject</param>
+        /// <returns></returns>
         public static string GetDescription(this Enum instance)
         {
             var type = instance.GetType();            
@@ -29,6 +34,12 @@ namespace Common.Util
             return member.GetCustomAttribute<DescriptionAttribute>() is DescriptionAttribute attribute ? attribute.Description : member.Name;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type">EnumType</param>
+        /// <param name="obj">Member,Value,ObjectInstance All Can</param>
+        /// <returns></returns>
         public static string GetName(Type type, dynamic obj)
         {
             if (null == type)
