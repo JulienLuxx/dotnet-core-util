@@ -28,8 +28,8 @@ namespace Common.XUnitTest
         [Fact]
         public void GetLongByGuidTest()
         {
-            _encryptUtil.GetLongByGuid(out var num);
-            Assert.True(num > 0);
+            var flag= _encryptUtil.GetLongByGuid(out var num);
+            Assert.True(flag);
         }
     }
 }
