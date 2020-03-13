@@ -14,6 +14,6 @@ namespace Common.Util
 
         string GetMd5By32(string value, Encoding encoding);
 
-        void GetLongByGuid(out long num);
+        bool GetLongByGuid(out long num);
     }
 }

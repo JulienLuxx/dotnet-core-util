@@ -55,10 +55,20 @@ namespace Common.Util
 
         #endregion
 
-        public void GetLongByGuid(out long num)
+        public bool GetLongByGuid(out long num)
         {
-            byte[] buffer = Guid.NewGuid().ToByteArray();
-            num = BitConverter.ToInt64(buffer, 0);
+            try
+            {
+                byte[] buffer = Guid.NewGuid().ToByteArray();
+                num = BitConverter.ToInt64(buffer, 0);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                num = 0;
+                return false;
+            }
+
         }
     }
 }
