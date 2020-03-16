@@ -68,7 +68,26 @@ namespace Common.Util
                 num = 0;
                 return false;
             }
+        }
 
+        public bool GetLongByGuid(Guid guid, out long num)
+        {
+            if (null == guid || guid == Guid.Empty)
+            {
+                num = 0;
+                return false;
+            }
+            try
+            {
+                byte[] buffer = guid.ToByteArray();
+                num = BitConverter.ToInt64(buffer, 0);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                num = 0;
+                return false;
+            }
         }
     }
 }
