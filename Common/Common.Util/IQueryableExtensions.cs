@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -19,6 +18,10 @@ namespace Common.Util
         /// <returns></returns>
         public static IQueryable<TSource> OrderBy<TSource>(this IQueryable<TSource> source, string columnName, bool isDesc) where TSource : class
         {
+            if (null == source)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
             try
             {
                 Type type = typeof(TSource);
@@ -43,28 +46,24 @@ namespace Common.Util
             }
 
         }
-    }
 
-    public static class IEnumerableExtensions
-    {
         /// <summary>
-        /// DistinctBy
+        /// Paging
         /// </summary>
-        /// <typeparam name="TSource">TheSourceWantToDistinct</typeparam>
-        /// <typeparam name="TKey"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="keySelector"></param>
+        /// <typeparam name="TSource">TheSourceQuery</typeparam>
+        /// <param name="source">IQueryableSource</param>
+        /// <param name="currentPage">CurrentPageNum</param>
+        /// <param name="pageSize">PageSize</param>
         /// <returns></returns>
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        public static IQueryable<TSource> Paging<TSource>(this IQueryable<TSource> source, int currentPage, int pageSize) 
         {
-            HashSet<TKey> seenKeys = new HashSet<TKey>();
-            foreach (TSource element in source)
+            if (null == source)
             {
-                if (seenKeys.Add(keySelector(element)))
-                {
-                    yield return element;
-                }
+                throw new ArgumentNullException(nameof(source));
             }
+            currentPage = currentPage <= 0 ? 1 : currentPage;
+            var query= source.Skip((currentPage - 1) * pageSize).Take(pageSize);
+            return query;
         }
     }
 }
