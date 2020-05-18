@@ -7,6 +7,22 @@ using System.Text;
 
 namespace Common.CoreUtil
 {
+    public interface IHttpResult
+    { 
+        dynamic Result { get; }
+
+        bool IsSuccess { get; }
+
+        string[] Cookies { get; }
+
+        HttpStatusCode ResultCode { get; }
+    }
+
+    public interface IHttpResult<T> : IHttpResult
+    {
+        new T Result { get; set; }
+    }
+
     public class HttpResult
     {
         /// <summary>
