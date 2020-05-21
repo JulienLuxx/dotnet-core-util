@@ -28,7 +28,7 @@ namespace Common.CoreUtil
             throw new NotImplementedException();
         }
 
-        public async Task<IHttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, JsonConvertOptionEnum jsonConvertOption=JsonConvertOptionEnum.NewtonSoftJson,Encoding encoding = null, string[] cookiesArray = null, string userAgent = null) 
+        public async Task<IHttpResult> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null) 
         {
             var httpMethod = new HttpMethod(httpMethodStr);
             using (var request = new HttpRequestMessage(httpMethod, @url))
@@ -95,6 +95,7 @@ namespace Common.CoreUtil
                                 {
                                     var result = await response.Content.ReadAsStringAsync();
                                     //return new HttpResult(result, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                    return new HttpResult<string>(result, response.StatusCode, response.IsSuccessStatusCode, cookieFlag ? setCookies.ToArray() : null);
                                 }
                                 else
                                 {
@@ -119,26 +120,28 @@ namespace Common.CoreUtil
                                         var byteArray = memoryStream.GetBuffer();
                                         var resultStr = encoding.GetString(byteArray);
                                         //return new HttpResult(resultStr, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                        return new HttpResult<string>(resultStr, response.StatusCode, response.IsSuccessStatusCode, cookieFlag ? setCookies.ToArray() : null);
                                     }
                                 }
                             }
                             else
                             {
                                 //return new HttpResult(string.Empty, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                return new HttpResult<string>(string.Empty, response.StatusCode, response.IsSuccessStatusCode, cookieFlag ? setCookies.ToArray() : null);
                             }
 
                         }
                         else
                         {
                             //return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                            return new HttpResult(response.StatusCode);
                         }
                     }
                 }
             }
-            throw new NotImplementedException();
         }
 
-        public async Task<HttpResult> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null)
+        public async Task<HttpResultDto> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null)
         {
             using (var request = new HttpRequestMessage(httpMethod, @url))
             {
@@ -201,16 +204,16 @@ namespace Common.CoreUtil
                             var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
                             if (cookieFlag)
                             {
-                                return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                                return new HttpResultDto(result, setCookies.ToList(), response.StatusCode, true);
                             }
                             else
                             {
-                                return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                                return new HttpResultDto(result, new List<string>(), response.StatusCode, true);
                             }
                         }
                         else
                         {
-                            return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                            return new HttpResultDto(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                         }
                     }
 
@@ -218,7 +221,7 @@ namespace Common.CoreUtil
             }
         }
 
-        public async Task<HttpResult> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null)
+        public async Task<HttpResultDto> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null)
         {
             var httpMethod = new HttpMethod(httpMethodStr.ToUpper());
             using (var request = new HttpRequestMessage(httpMethod, @url))
@@ -282,23 +285,23 @@ namespace Common.CoreUtil
                             var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
                             if (cookieFlag)
                             {
-                                return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                                return new HttpResultDto(result, setCookies.ToList(), response.StatusCode, true);
                             }
                             else
                             {
-                                return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                                return new HttpResultDto(result, new List<string>(), response.StatusCode, true);
                             }
                         }
                         else
                         {
-                            return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                            return new HttpResultDto(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                         }
                     }
                 }
             }
         }
 
-        public async Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, Encoding encoding = null, List<string> cookieList = null, string userAgent = null) where T : class 
+        public async Task<HttpResultDto> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, Encoding encoding = null, List<string> cookieList = null, string userAgent = null) where T : class 
         {
             var httpMethod = new HttpMethod(httpMethodStr.ToUpper());
             using(var request = new HttpRequestMessage(httpMethod, @url))
@@ -364,7 +367,7 @@ namespace Common.CoreUtil
                                 if (response.Content.Headers.ContentLength < 81920)
                                 {
                                     var result = await response.Content.ReadAsStringAsync();
-                                    return new HttpResult(result, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                    return new HttpResultDto(result, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
                                 }
                                 else
                                 {
@@ -388,19 +391,19 @@ namespace Common.CoreUtil
                                         //await memoryStream.ReadAsync(byteArray, 0, byteArray.Length);
                                         var byteArray = memoryStream.GetBuffer();
                                         var resultStr = encoding.GetString(byteArray);
-                                        return new HttpResult(resultStr, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                        return new HttpResultDto(resultStr, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
                                     }
                                 }
                             }
                             else
                             {
-                                return new HttpResult(string.Empty, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
+                                return new HttpResultDto(string.Empty, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
                             }
 
                         }
                         else
                         {
-                            return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                            return new HttpResultDto(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                         }
                     }
                 }
@@ -408,7 +411,7 @@ namespace Common.CoreUtil
 
         }
 
-        public async Task<HttpResult> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) 
+        public async Task<HttpResultDto> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) 
         {
             using (var request = new HttpRequestMessage(httpMethod, @url))
             {
@@ -476,22 +479,22 @@ namespace Common.CoreUtil
                         var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
                         if (cookieFlag)
                         {
-                            return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                            return new HttpResultDto(result, setCookies.ToList(), response.StatusCode, true);
                         }
                         else
                         {
-                            return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                            return new HttpResultDto(result, new List<string>(), response.StatusCode, true);
                         }
                     }
                     else
                     {
-                        return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                        return new HttpResultDto(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                     }
                 }
             }
         }
 
-        public async Task<HttpResult> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) 
+        public async Task<HttpResultDto> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) 
         {
             var httpMethod = new HttpMethod(httpMethodStr.ToUpper());
             using (var request = new HttpRequestMessage(httpMethod, @url))
@@ -560,23 +563,23 @@ namespace Common.CoreUtil
                             var cookieFlag = response.Headers.TryGetValues("Set-Cookie", out var setCookies);
                             if (cookieFlag)
                             {
-                                return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                                return new HttpResultDto(result, setCookies.ToList(), response.StatusCode, true);
                             }
                             else
                             {
-                                return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                                return new HttpResultDto(result, new List<string>(), response.StatusCode, true);
                             }
                         }
                         else
                         {
-                            return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                            return new HttpResultDto(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                         }
                     }
                 }
             }
         }
 
-        public async Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) where T : class 
+        public async Task<HttpResultDto> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) where T : class 
         {
             var httpMethod = new HttpMethod(httpMethodStr.ToUpper());
             using (var request = new HttpRequestMessage(httpMethod, @url))
@@ -646,16 +649,16 @@ namespace Common.CoreUtil
 
                             if (cookieFlag)
                             {
-                                return new HttpResult(result, setCookies.ToList(), response.StatusCode, true);
+                                return new HttpResultDto(result, setCookies.ToList(), response.StatusCode, true);
                             }
                             else
                             {
-                                return new HttpResult(result, new List<string>(), response.StatusCode, true);
+                                return new HttpResultDto(result, new List<string>(), response.StatusCode, true);
                             }
                         }
                         else
                         {
-                            return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
+                            return new HttpResultDto(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
                         }
                     }
                 }
@@ -663,7 +666,7 @@ namespace Common.CoreUtil
 
         }
 
-        public async Task<HttpStreamResult> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null)
+        public async Task<HttpStreamResultDto> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null)
         {
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
@@ -723,16 +726,16 @@ namespace Common.CoreUtil
                             memoryStream.Seek(0, SeekOrigin.Begin);
                             if (memoryStream.Length > 0)
                             {
-                                return new HttpStreamResult(memoryStream, response.StatusCode, true);
+                                return new HttpStreamResultDto(memoryStream, response.StatusCode, true);
                             }
                             else
                             {
-                                return new HttpStreamResult(null, response.StatusCode, false);
+                                return new HttpStreamResultDto(null, response.StatusCode, false);
                             }
                         }
                         else
                         {
-                            return new HttpStreamResult(null, response.StatusCode, false);
+                            return new HttpStreamResultDto(null, response.StatusCode, false);
                         }
                     }
 
@@ -740,7 +743,7 @@ namespace Common.CoreUtil
             }
         }
 
-        public async Task<HttpStreamResult> GetStreamAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null) where T : class 
+        public async Task<HttpStreamResultDto> GetStreamAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null) where T : class 
         {
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
@@ -800,18 +803,18 @@ namespace Common.CoreUtil
                             memoryStream.Seek(0, SeekOrigin.Begin);
                             if (memoryStream.Length > 0)
                             {                                
-                                return new HttpStreamResult(memoryStream, response.StatusCode, true);
+                                return new HttpStreamResultDto(memoryStream, response.StatusCode, true);
                             }
                             else
                             {
                                 memoryStream.Dispose();
-                                return new HttpStreamResult(null, response.StatusCode, false);
+                                return new HttpStreamResultDto(null, response.StatusCode, false);
                             }
                         }
                         else
                         {
                             memoryStream.Dispose();
-                            return new HttpStreamResult(null, response.StatusCode, false);
+                            return new HttpStreamResultDto(null, response.StatusCode, false);
                         }
                     }
                 }

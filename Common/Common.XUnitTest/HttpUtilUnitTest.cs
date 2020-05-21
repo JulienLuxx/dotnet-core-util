@@ -8,6 +8,7 @@ using Xunit;
 using System.IO;
 using System.ComponentModel;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace Common.XUnitTest
 {
@@ -66,6 +67,37 @@ namespace Common.XUnitTest
         public string AppToken { get; set; }
     }
 
+    public class BasePageQueryModel
+    {
+        private int _pageIndex = 0;
+        //[Description("pageIndex")]
+        public int PageIndex
+        {
+            get => _pageIndex <= 0 ? 1 : _pageIndex;
+            set => _pageIndex = value;
+        }
+
+        private int _pageSize = 0;
+        //[Description("pageSize")]
+        public int PageSize
+        {
+            get => _pageSize <= 0 ? 20 : _pageSize;
+            set => _pageSize = value;
+        }
+
+        public int TotalCount { get; set; }
+
+
+        private string _orderByColumn = string.Empty;
+        public string OrderByColumn
+        {
+            get => string.IsNullOrEmpty(_orderByColumn) || string.IsNullOrWhiteSpace(_orderByColumn) ? string.Empty : _orderByColumn.Trim();
+            set => _orderByColumn = value;
+        }
+
+        public bool IsDesc { get; set; }
+    }
+
     public class HttpUtilUnitTest : BaseUnitTest
     {
         private IHttpClientUtil _httpClientUtil { get; set; }
@@ -88,21 +120,21 @@ namespace Common.XUnitTest
             return File.ReadAllText("C:/Users/Julien/Desktop/t.txt");
         }
 
-        public async Task<HttpResult> SendAsyncGeneric()
+        public async Task<HttpResultDto> SendAsyncGeneric()
         {
             string json = @GetJson();
             var httpResult = await _httpClientUtil.SendAsync(new { c = "Writes", t = string.Empty, d = json }, @"http://192.168.118.27:8000/Log", "POST", MediaTypeEnum.ApplicationFormUrlencoded);
             return httpResult;
         }
 
-        public async Task<HttpResult> SendAsync2()
+        public async Task<HttpResultDto> SendAsync2()
         {
             var json = GetJson2();
             var httpResult = await _httpClientUtil.SendAsync(new { d = json }, @"http://localhost:5000/DAQManage?c=UpdateUserCenterData", "POST", MediaTypeEnum.ApplicationFormUrlencoded);
             return httpResult;
         }
 
-        public async Task<HttpResult> SendAsync3()
+        public async Task<HttpResultDto> SendAsync3()
         {
             var param = new UserCenterSendParam()
             {
@@ -132,6 +164,25 @@ namespace Common.XUnitTest
             httpResult.Stream.Dispose();
             fileStream.Close();
             Assert.True(true);
+        }
+
+        public async Task<HttpResult<string>> SendAsync()
+        {
+            var param = new BasePageQueryModel()
+            {
+                PageSize=500,
+                OrderByColumn="Id",
+                IsDesc=true
+            };
+            var httpResult = await _httpClientUtil.SendAsync<BasePageQueryModel>(param, MediaTypeEnum.UrlQuery, "http://localhost:5010/Log/Page", "get", JsonConvertOptionEnum.SystemJson) as HttpResult<string>;
+            return httpResult;
+        }
+
+        [Fact]
+        public async Task SendAsyncTest()
+        {
+            var result = await SendAsync();
+            Assert.True(result.IsSuccess);
         }
     }
 }

@@ -10,6 +10,21 @@ namespace Common.CoreUtil
     public interface IHttpClientUtil: IDependency
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="param"></param>
+        /// <param name="mediaType"></param>
+        /// <param name="url"></param>
+        /// <param name="httpMethodStr"></param>
+        /// <param name="jsonConvertOption"></param>
+        /// <param name="encoding"></param>
+        /// <param name="cookiesArray"></param>
+        /// <param name="userAgent"></param>
+        /// <returns></returns>
+        Task<IHttpResult> SendAsync<T>(T param,MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null);
+
+        /// <summary>
         /// AsyncSendPackage(Not suppot use DescriptionAttribute in param)
         /// </summary>
         /// <param name="param">RequestParam</param>
@@ -19,7 +34,7 @@ namespace Common.CoreUtil
         /// <param name="cookieList">RequestCookieStringList</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpResult> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null);
+        Task<HttpResultDto> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage(Not suppot use DescriptionAttribute in param)
@@ -31,7 +46,7 @@ namespace Common.CoreUtil
         /// <param name="cookieList">RequestCookieStringList</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpResult> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null);
+        Task<HttpResultDto> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, List<string> cookieList = null, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage(Suppot use DescriptionAttribute in param)
@@ -45,7 +60,7 @@ namespace Common.CoreUtil
         /// <param name="cookieList">RequestCookieStringList</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, Encoding encoding = null, List<string> cookieList = null, string userAgent = null) where T : class;
+        Task<HttpResultDto> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, Encoding encoding = null, List<string> cookieList = null, string userAgent = null) where T : class;
         
         /// <summary>
         /// AsyncSendPackage(Not suppot use DescriptionAttribute in param)
@@ -58,7 +73,7 @@ namespace Common.CoreUtil
         /// <param name="cookieList">RequestCookieStringList</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpResult> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null);
+        Task<HttpResultDto> SendAsync(dynamic param, string url, HttpMethod httpMethod, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage(Not suppot use DescriptionAttribute in param)
@@ -71,7 +86,7 @@ namespace Common.CoreUtil
         /// <param name="cookieList">RequestCookieStringList</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpResult> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null);
+        Task<HttpResultDto> SendAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage(Suppot use DescriptionAttribute in param)
@@ -85,7 +100,8 @@ namespace Common.CoreUtil
         /// <param name="cookieList">RequestCookieStringList</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpResult> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) where T : class;
+        [Obsolete]
+        Task<HttpResultDto> SendAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, bool isParamConvertCookies, List<string> cookieList = null, string userAgent = null) where T : class;
 
         /// <summary>
         /// AsyncSendPackage,GetResultInStream(Not suppot use DescriptionAttribute in param)
@@ -96,7 +112,7 @@ namespace Common.CoreUtil
         /// <param name="mediaType">RequestParamMediaType</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpStreamResult> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null);
+        Task<HttpStreamResultDto> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage,GetResultInStream(Suppot use DescriptionAttribute in param)
@@ -108,6 +124,6 @@ namespace Common.CoreUtil
         /// <param name="mediaType">RequestParamMediaType</param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpStreamResult> GetStreamAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null) where T : class;
+        Task<HttpStreamResultDto> GetStreamAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null) where T : class;
     }
 }

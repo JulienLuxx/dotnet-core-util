@@ -15,6 +15,8 @@ namespace Common.CoreUtil
 
         string[] Cookies { get; }
 
+        bool HasCookies { get; }
+
         HttpStatusCode ResultCode { get; }
     }
 
@@ -23,19 +25,65 @@ namespace Common.CoreUtil
         new T Result { get; set; }
     }
 
-    public class HttpResult
+    public class HttpResult : IHttpResult
+    {
+         public dynamic Result { get; }
+
+         public bool IsSuccess { get; }
+
+         public string[] Cookies { get; }
+
+        public bool HasCookies { get; }
+
+        public HttpStatusCode ResultCode { get; }
+
+        public HttpResult(HttpStatusCode resultCode, bool isSuccess = false) 
+        {
+            Result = resultCode.ToString();
+            IsSuccess = isSuccess;
+            Cookies = null;
+            HasCookies = false;
+            ResultCode = resultCode;
+        }
+    }
+
+    public class HttpResult<T> : IHttpResult<T>
+    {
+        public T Result { get; set; }
+
+        dynamic IHttpResult.Result { get => Result; }
+
+        public bool IsSuccess { get; }
+
+        public string[] Cookies { get; }
+
+        public bool HasCookies { get; }
+
+        public HttpStatusCode ResultCode { get; }
+
+        public HttpResult(T result, HttpStatusCode resultCode, bool isSuccess = false, string[] cookies = null)
+        {
+            Result = result;
+            IsSuccess = isSuccess;
+            Cookies = cookies;
+            HasCookies = null != cookies && cookies.Any();
+            ResultCode = resultCode;
+        }
+    }
+
+    public class HttpResultDto
     {
         /// <summary>
         /// Ctor
         /// </summary>
-        public HttpResult()
+        public HttpResultDto()
         { }
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="cookies">ResponseCookies</param>
-        public HttpResult(List<string> cookies)
+        public HttpResultDto(List<string> cookies)
         {
             Cookies = cookies;
         }
@@ -44,7 +92,7 @@ namespace Common.CoreUtil
         /// Ctor
         /// </summary>
         /// <param name="result">ResponseContentString</param>
-        public HttpResult(string result)
+        public HttpResultDto(string result)
         {
             Result = result;
         }
@@ -53,7 +101,7 @@ namespace Common.CoreUtil
         /// Ctor
         /// </summary>
         /// <param name="isSuccess">IsResponseSuccess</param>
-        public HttpResult(bool isSuccess)
+        public HttpResultDto(bool isSuccess)
         {
             IsSuccess = isSuccess;
         }
@@ -64,7 +112,7 @@ namespace Common.CoreUtil
         /// <param name="result">ResponseContentString</param>
         /// <param name="cookies">ResponseCookies</param>
         /// <param name="isSuccess">IsResponseSuccess</param>
-        public HttpResult(string result, List<string> cookies, bool isSuccess)
+        public HttpResultDto(string result, List<string> cookies, bool isSuccess)
         {
             Result = result;
             Cookies = cookies;
@@ -78,7 +126,7 @@ namespace Common.CoreUtil
         /// <param name="cookies">ResponseCookies</param>
         /// <param name="resultCode">ResultStatusCode</param>
         /// <param name="isSuccess">IsResponseSuccess</param>
-        public HttpResult(string result, List<string> cookies, HttpStatusCode resultCode, bool isSuccess) 
+        public HttpResultDto(string result, List<string> cookies, HttpStatusCode resultCode, bool isSuccess) 
         {
             Result = result;
             Cookies = cookies;
@@ -93,7 +141,7 @@ namespace Common.CoreUtil
         /// <param name="cookieArray">ResponseCookies</param>
         /// <param name="resultCode">ResultStatusCode</param>
         /// <param name="isSuccess">IsResponseSuccess</param>
-        public HttpResult(string result, string[] cookieArray, HttpStatusCode resultCode, bool isSuccess)
+        public HttpResultDto(string result, string[] cookieArray, HttpStatusCode resultCode, bool isSuccess)
         {
             Result = result;
             Cookies = cookieArray.ToList();
@@ -122,12 +170,12 @@ namespace Common.CoreUtil
         public HttpStatusCode ResultCode { get; set; }
     }
 
-    public class HttpStreamResult
+    public class HttpStreamResultDto
     {
         /// <summary>
         /// Ctor
         /// </summary>
-        public HttpStreamResult()
+        public HttpStreamResultDto()
         { }
 
         /// <summary>
@@ -135,7 +183,7 @@ namespace Common.CoreUtil
         /// </summary>
         /// <param name="stream">ResultStream</param>
         /// <param name="isSuccess">IsResponseSuccess</param>
-        public HttpStreamResult(MemoryStream stream,bool isSuccess)
+        public HttpStreamResultDto(MemoryStream stream,bool isSuccess)
         {
             Stream = stream;
             IsSuccess = isSuccess;
@@ -147,7 +195,7 @@ namespace Common.CoreUtil
         /// <param name="stream">ResultStream</param>
         /// <param name="resultCode">ResultStatusCode</param>
         /// <param name="isSuccess">IsResponseSuccess</param>
-        public HttpStreamResult(MemoryStream stream, HttpStatusCode resultCode, bool isSuccess) 
+        public HttpStreamResultDto(MemoryStream stream, HttpStatusCode resultCode, bool isSuccess) 
         {
             Stream = stream;
             ResultCode = resultCode;
