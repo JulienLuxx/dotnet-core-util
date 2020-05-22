@@ -98,6 +98,15 @@ namespace Common.XUnitTest
         public bool IsDesc { get; set; }
     }
 
+    public class TestDto
+    {
+        public string Name { get; set; }
+
+        public string EditerName { get; set; }
+
+        public int Status { get; set; }
+    }
+
     public class HttpUtilUnitTest : BaseUnitTest
     {
         private IHttpClientUtil _httpClientUtil { get; set; }
@@ -166,7 +175,7 @@ namespace Common.XUnitTest
             Assert.True(true);
         }
 
-        public async Task<HttpResult<string>> SendAsync()
+        public async Task<HttpResult<string>> GetAsync()
         {
             var param = new BasePageQueryModel()
             {
@@ -174,14 +183,26 @@ namespace Common.XUnitTest
                 OrderByColumn="Id",
                 IsDesc=true
             };
-            var httpResult = await _httpClientUtil.SendAsync<BasePageQueryModel>(param, MediaTypeEnum.UrlQuery, "http://localhost:5010/Log/Page", "get", JsonConvertOptionEnum.SystemJson) as HttpResult<string>;
+            var httpResult = await _httpClientUtil.SendAsync(param, MediaTypeEnum.UrlQuery, "http://localhost:5010/Log/Page", "get", JsonConvertOptionEnum.SystemJson) as HttpResult<string>;
+            return httpResult;
+        }
+
+        public async Task<HttpResult<string>> PostAsync()
+        {
+            var param = new TestDto()
+            {
+                Name="UtilTest",
+                EditerName="Util",
+                Status=0
+            };
+            var httpResult = await _httpClientUtil.SendAsync(param, MediaTypeEnum.ApplicationJson, "http://localhost:5010/ArticleType/Add", "post", JsonConvertOptionEnum.SystemJson) as HttpResult<string>;
             return httpResult;
         }
 
         [Fact]
         public async Task SendAsyncTest()
         {
-            var result = await SendAsync();
+            var result = await PostAsync();
             Assert.True(result.IsSuccess);
         }
     }
