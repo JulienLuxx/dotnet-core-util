@@ -16,7 +16,7 @@ namespace Common.Util
         /// <param name="columnName">ColumnName</param>
         /// <param name="isDesc">DESCorASC</param>
         /// <returns></returns>
-        public static IQueryable<TSource> OrderBy<TSource>(this IQueryable<TSource> source, string columnName, bool isDesc) where TSource : class
+        public static IQueryable<TSource> OrderBy<TSource>(this IQueryable<TSource> source, string columnName, bool isDesc = false) where TSource : class 
         {
             if (null == source)
             {
