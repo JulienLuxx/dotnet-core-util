@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.0.22</Version>
+    <Version>0.0.24</Version>
     <Authors>JulienLux</Authors>
     <Company>JulienLux</Company>
     <Product>JulienLux</Product>
     <Copyright>Copyright (c) 2019 JulienLux</Copyright>
-    <AssemblyVersion>0.0.23.0</AssemblyVersion>
-    <FileVersion>0.0.23.0</FileVersion>
+    <AssemblyVersion>0.0.24.0</AssemblyVersion>
+    <FileVersion>0.0.24.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
