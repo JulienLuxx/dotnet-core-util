@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Common.Util
@@ -61,6 +63,31 @@ namespace Common.Util
             {
                 return FileType.UnSupport;
             }
+        }
+
+        public static string GetRuntimePath(string path)
+        {
+            if (RuntimeHelper.IsLinuxRunTime())
+            {
+                return GetLinuxPath(path);
+            }
+            if (RuntimeHelper.IsWindowRunTime())
+            {
+                return GetWindowPath(path);
+            }
+            return path;
+        }
+
+        public static string GetLinuxPath(string path)
+        {
+            string pathTemp = Path.Combine(path);
+            return pathTemp.Replace("\\", "/");
+        }
+
+        public static string GetWindowPath(string path)
+        {
+            string pathTemp = Path.Combine(path);
+            return pathTemp.Replace("/", "\\");
         }
     }
 }
