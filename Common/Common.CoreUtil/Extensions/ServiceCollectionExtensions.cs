@@ -11,7 +11,29 @@ namespace Common.CoreUtil
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Add HttpClientUtil to IServiceCollection
+        /// Register Common.Util.IMapUtil to IServiceCollection
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddMapUtil(this IServiceCollection services)
+        {
+            services.AddScoped<IMapUtil, MapUtil>();
+            return services;
+        }
+
+        /// <summary>
+        /// Register Common.Util.IEncryptUtil to IServiceCollection
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddEncryptUtil(this IServiceCollection services)
+        {
+            services.AddScoped<IEncryptUtil, EncryptUtil>();
+            return services;
+        }
+
+        /// <summary>
+        /// Register HttpClientUtil to IServiceCollection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
