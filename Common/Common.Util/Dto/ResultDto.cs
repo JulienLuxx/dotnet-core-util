@@ -15,7 +15,7 @@ namespace Common.Util
 
         string Message { get; set; }
 
-        int State { get; set; }
+        long State { get; set; }
     }
 
     public interface IResultDto<T> : IResultDto
@@ -34,7 +34,7 @@ namespace Common.Util
 
         public string Message { get; set; }
 
-        public int State { get; set; }
+        public long State { get; set; }
 
         public ResultDto(dynamic data, bool hasData, string message, int state)
         {
@@ -67,6 +67,14 @@ namespace Common.Util
             Message = message;
             State = state;
         }
+
+        public ResultDto(long state, string message = null)
+        {
+            Data = default;
+            HasData = false;
+            Message = message;
+            State = state;
+        }
     }
 
     public struct ResultDto<T> : IResultDto<T> 
@@ -81,7 +89,7 @@ namespace Common.Util
 
         public string Message { get; set; }
 
-        public int State { get; set; }
+        public long State { get; set; }
 
         public ResultDto(T data, bool hasData, string message, int state)
         {
@@ -108,6 +116,14 @@ namespace Common.Util
         }
 
         public ResultDto(int state, string message = null)
+        {
+            Data = default;
+            HasData = false;
+            Message = message;
+            State = state;
+        }
+
+        public ResultDto(long state, string message = null)
         {
             Data = default;
             HasData = false;
