@@ -44,6 +44,14 @@ namespace Common.Util
             State = state;
         }
 
+        public ResultDto(dynamic data, bool hasData, string message, long state)
+        {
+            Data = data;
+            HasData = hasData;
+            Message = message;
+            State = state;
+        }
+
         public ResultDto(dynamic data, int state = 200, string message = null)
         {
             Data = data;
@@ -92,6 +100,14 @@ namespace Common.Util
         public long State { get; set; }
 
         public ResultDto(T data, bool hasData, string message, int state)
+        {
+            Data = data;
+            HasData = hasData;
+            Message = message;
+            State = state;
+        }
+
+        public ResultDto(T data, bool hasData, string message, long state)
         {
             Data = data;
             HasData = hasData;
