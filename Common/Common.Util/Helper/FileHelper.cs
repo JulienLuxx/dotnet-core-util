@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -59,6 +60,10 @@ namespace Common.Util
             {
                 return FileType.WindowsExecutable;
             }
+            else if (string.CompareOrdinal(extension, ".dll") == 0)
+            {
+                return FileType.WindowsDLL;
+            }
             else
             {
                 return FileType.UnSupport;
@@ -88,6 +93,30 @@ namespace Common.Util
         {
             string pathTemp = Path.Combine(path);
             return pathTemp.Replace("/", "\\");
+        }
+
+        public static bool VerifyFileExtesion(string extension)
+        {
+            var extensionList = new List<string>()
+            {
+                ".asp",
+                ".aspx",
+                ".ashx",
+                ".asa",
+                ".asax",
+                ".asmx",
+                ".dll",
+                ".exe",
+                ".js",
+                ".jsp",
+                ".htm",
+                ".html",
+                ".sql",
+                ".php",
+                ".py"
+            };
+            var flag = !extensionList.Where(x => string.CompareOrdinal(extension, x) == 0).Any();
+            return flag;
         }
     }
 }
