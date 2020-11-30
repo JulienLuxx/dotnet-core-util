@@ -31,6 +31,9 @@ namespace Common.Util
         [Description("WindowsExecutable")]
         WindowsExecutable,
 
+        [Description("WindowsDLL")]
+        WindowsDLL,
+
         [Description("Word")]
         Word,
 
