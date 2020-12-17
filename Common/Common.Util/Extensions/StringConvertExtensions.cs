@@ -52,6 +52,35 @@ namespace Common.Util
         public static string FilterEmptyWhiteSpace(this string value, bool isTrim = false) => string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value) ? string.Empty : isTrim ? value.Trim() : value;
 
         /// <summary>
+        /// StringFilterOutEmptyAndWhiteSpace
+        /// </summary>
+        /// <param name="value">StringValue</param>
+        /// <param name="filterValue">Out StringValue</param>
+        /// <param name="isTrim">WhetherNeedTrim</param>
+        /// <returns></returns>
+        public static bool FilterEmptyWhiteSpace(this string value, out string filterValue, bool isTrim = false)
+        {
+            if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+            {
+                filterValue = string.Empty;
+                return false;
+            }
+            else
+            {
+                if (isTrim)
+                {
+                    filterValue = value.Trim();
+                    return true;
+                }
+                else
+                {
+                    filterValue = value;
+                    return true;
+                }
+            }
+        }
+
+        /// <summary>
         ///  StringFilterOutEmptyAndWhiteSpaceOrSpecifyPhrase
         /// </summary>
         /// <param name="value">StringValue</param>
