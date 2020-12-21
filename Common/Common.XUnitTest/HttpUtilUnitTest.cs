@@ -107,6 +107,15 @@ namespace Common.XUnitTest
         public int Status { get; set; }
     }
 
+    public class WeComAccessTokenParam
+    {
+        [Description("corpid")]
+        public string CorpId { get; set; }
+
+        [Description("corpsecret")]
+        public string CorpSecret { get; set; }
+    }
+
     public class HttpUtilUnitTest : BaseUnitTest
     {
         private IHttpClientUtil _httpClientUtil { get; set; }
@@ -203,6 +212,18 @@ namespace Common.XUnitTest
         public async Task SendAsyncTest()
         {
             var result = await PostAsync();
+            Assert.True(result.IsSuccess);
+        }
+
+        [Fact]
+        public async Task WeComSendTest()
+        {
+            var param = new WeComAccessTokenParam()
+            {
+                CorpId = "ww906ab183effcd12b",
+                CorpSecret = "iCoggU4TtZsme87i4x6vuryxK2yeBrHmCef9ZvbTwNA"
+            };
+            var result = await _httpClientUtil.SendAsync(param, MediaTypeEnum.UrlQuery, "https://qyapi.weixin.qq.com/cgi-bin/gettoken", "get") as HttpResult<string>;
             Assert.True(result.IsSuccess);
         }
     }
