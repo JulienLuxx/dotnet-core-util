@@ -28,7 +28,7 @@ namespace Common.CoreUtil
             throw new NotImplementedException();
         }
 
-        public async Task<IHttpResult> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null) 
+        public async Task<IHttpResult<string>> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null) 
         {
             var httpMethod = new HttpMethod(httpMethodStr);
             using (var request = new HttpRequestMessage(httpMethod, @url))
@@ -134,7 +134,7 @@ namespace Common.CoreUtil
                         else
                         {
                             //return new HttpResult(response.StatusCode.ToString(), new List<string>(), response.StatusCode, false);
-                            return new HttpResult(response.StatusCode);
+                            return new HttpResult<string>(response.StatusCode);
                         }
                     }
                 }

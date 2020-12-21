@@ -10,7 +10,7 @@ namespace Common.CoreUtil
     public interface IHttpClientUtil: IDependency
     {
         /// <summary>
-        /// 
+        /// AsyncSendPackage(Suppot use DescriptionAttribute in param)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="param"></param>
@@ -22,7 +22,7 @@ namespace Common.CoreUtil
         /// <param name="cookiesArray"></param>
         /// <param name="userAgent"></param>
         /// <returns></returns>
-        Task<IHttpResult> SendAsync<T>(T param,MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null);
+        Task<IHttpResult<string>> SendAsync<T>(T param,MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage(Not suppot use DescriptionAttribute in param)
