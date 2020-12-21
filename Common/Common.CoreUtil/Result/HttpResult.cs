@@ -69,6 +69,14 @@ namespace Common.CoreUtil
             HasCookies = null != cookies && cookies.Any();
             ResultCode = resultCode;
         }
+
+        public HttpResult(HttpStatusCode resultCode, bool isSuccess = false)
+        {
+            IsSuccess = isSuccess;
+            Cookies = null;
+            HasCookies = false;
+            ResultCode = resultCode;
+        }
     }
 
     public class HttpResultDto
