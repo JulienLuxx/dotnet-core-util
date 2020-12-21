@@ -116,6 +116,21 @@ namespace Common.XUnitTest
         public string CorpSecret { get; set; }
     }
 
+    public class AccessTokenApiResultDto
+    {
+        [JsonProperty("errcode")]
+        public int ErrCode { get; set; }
+
+        [JsonProperty("errmsg")]
+        public string ErrMsg { get; set; }
+
+        [JsonProperty("access_token")]
+        public string AccessToken { get; set; }
+
+        [JsonProperty("expires_in")]
+        public int ExpiresIn { get; set; }
+    }
+
     public class HttpUtilUnitTest : BaseUnitTest
     {
         private IHttpClientUtil _httpClientUtil { get; set; }
@@ -224,6 +239,7 @@ namespace Common.XUnitTest
                 CorpSecret = "iCoggU4TtZsme87i4x6vuryxK2yeBrHmCef9ZvbTwNA"
             };
             var result = await _httpClientUtil.SendAsync(param, MediaTypeEnum.UrlQuery, "https://qyapi.weixin.qq.com/cgi-bin/gettoken", "get") as HttpResult<string>;
+            var dto = JsonConvert.DeserializeObject<AccessTokenApiResultDto>(result.Result);
             Assert.True(result.IsSuccess);
         }
     }
