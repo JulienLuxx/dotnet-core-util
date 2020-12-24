@@ -60,6 +60,14 @@ namespace Common.Util
             State = state;
         }
 
+        public ResultDto(dynamic data, long state = 200, string message = null)
+        {
+            Data = data;
+            HasData = null != data;
+            Message = message;
+            State = state;
+        }
+
         public ResultDto(string message, int state = -1)
         {
             Data = default;
@@ -116,6 +124,14 @@ namespace Common.Util
         }
 
         public ResultDto(T data, int state = 200, string message = null) 
+        {
+            Data = data;
+            HasData = null != data;
+            Message = message;
+            State = state;
+        }
+
+        public ResultDto(T data, long state = 200, string message = null)
         {
             Data = data;
             HasData = null != data;
