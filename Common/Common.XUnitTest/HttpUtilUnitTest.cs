@@ -242,5 +242,11 @@ namespace Common.XUnitTest
             var dto = JsonConvert.DeserializeObject<AccessTokenApiResultDto>(result.Result);
             Assert.True(result.IsSuccess);
         }
+
+        [Fact]
+        public async Task FomFileUploadTest()
+        {
+            var result = await _httpClientUtil.SendAsync(new object(), MediaTypeEnum.MultipartFormData, "http://localhost:5010/upload/uploadsmallfile", "post");
+        }
     }
 }

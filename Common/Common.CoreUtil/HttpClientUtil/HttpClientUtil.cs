@@ -1,4 +1,5 @@
 ﻿using Common.Util;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using System;
@@ -25,6 +26,15 @@ namespace Common.CoreUtil
 
         public async Task<IHttpResult> GetAsync<T>(T param,string url,MediaTypeEnum mediaType)
         {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IHttpResult<D>> PostFileAsync<T, D>(IList<IFormFile> files, T param, string url) 
+        {
+            if (!files.Any())
+            { }
+            var boundary= string.Format("--{0}", DateTime.Now.Ticks.ToString("x"));
+            var content = new MultipartFormDataContent(boundary);
             throw new NotImplementedException();
         }
 
