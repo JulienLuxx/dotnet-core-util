@@ -111,7 +111,10 @@ namespace Common.Util
         public IDictionary<string, string> DynamicToDictionary<T>(T obj)
         {
             IDictionary<string, string> dict = new Dictionary<string, string>();
-
+            if (null == obj)
+            {
+                return dict;
+            }
             var type = obj.GetType();
             var propertys = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var property in propertys)
