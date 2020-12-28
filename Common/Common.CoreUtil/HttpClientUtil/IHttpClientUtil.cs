@@ -1,14 +1,18 @@
 ﻿using Common.Util;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Common.CoreUtil
 {
     public interface IHttpClientUtil: IDependency
     {
+        Task<IHttpResult<string>> PostFileAsync<T>(Stream stream, string fileName, T param, string url, string contentName = "files", CancellationToken cancellationToken = default, Encoding encoding = null);
+
         /// <summary>
         /// AsyncSendPackage(Suppot use DescriptionAttribute in param)
         /// </summary>
@@ -22,7 +26,7 @@ namespace Common.CoreUtil
         /// <param name="cookiesArray"></param>
         /// <param name="userAgent"></param>
         /// <returns></returns>
-        Task<IHttpResult<string>> SendAsync<T>(T param,MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null);
+        Task<IHttpResult<string>> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, CancellationToken cancellationToken = default, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage(Not suppot use DescriptionAttribute in param)

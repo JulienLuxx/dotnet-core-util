@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Common.CoreUtil
@@ -29,16 +30,67 @@ namespace Common.CoreUtil
             throw new NotImplementedException();
         }
 
-        public async Task<IHttpResult<D>> PostFileAsync<T, D>(IList<IFormFile> files, T param, string url) 
+        public async Task<IHttpResult<string>> PostFileAsync<T>(Stream stream, string fileName, T param, string url, string contentName = "files", CancellationToken cancellationToken = default, Encoding encoding = null) 
         {
-            if (!files.Any())
-            { }
+            var paramDict = _mapUtil.DynamicToDictionary(param);
             var boundary= string.Format("--{0}", DateTime.Now.Ticks.ToString("x"));
             var content = new MultipartFormDataContent(boundary);
-            throw new NotImplementedException();
+            content.Add(new StreamContent(stream, (int)stream.Length), contentName, fileName);
+            foreach (var item in paramDict)
+            {
+                content.Add(new StringContent(item.Value), item.Key);
+            }
+            using (var client=_clientFactory.CreateClient())
+            {
+                using (var response = await client.PostAsync(url, content, cancellationToken)) 
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        if (response.Content.Headers.ContentLength.HasValue)
+                        {
+                            if (response.Content.Headers.ContentLength < 81920)
+                            {
+                                var result = await response.Content.ReadAsStringAsync();
+                                return new HttpResult<string>(result, response.StatusCode, response.IsSuccessStatusCode);
+                            }
+                            else
+                            {
+                                using (var memoryStream = new MemoryStream())
+                                {
+                                    var charSet = response.Content.Headers.ContentType.CharSet;
+                                    if (null == encoding)
+                                    {
+                                        if (string.IsNullOrEmpty(charSet))
+                                        {
+                                            encoding = Encoding.Default;
+                                        }
+                                        else
+                                        {
+                                            encoding = Encoding.GetEncoding(charSet);
+                                        }
+                                    }
+                                    await response.Content.CopyToAsync(memoryStream);
+                                    memoryStream.Seek(0, SeekOrigin.Begin);
+                                    var byteArray = memoryStream.GetBuffer();
+                                    var resultStr = encoding.GetString(byteArray);
+                                    return new HttpResult<string>(resultStr, response.StatusCode, response.IsSuccessStatusCode);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return new HttpResult<string>(string.Empty, response.StatusCode, response.IsSuccessStatusCode);
+                        }
+                    }
+                    else
+                    {
+                        return new HttpResult<string>(response.StatusCode);
+                    }
+                }
+            }
         }
 
-        public async Task<IHttpResult<string>> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null) 
+        public async Task<IHttpResult<string>> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, CancellationToken cancellationToken = default, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null) 
         {
             var httpMethod = new HttpMethod(httpMethodStr);
             using (var request = new HttpRequestMessage(httpMethod, @url))
@@ -94,7 +146,7 @@ namespace Common.CoreUtil
 
                 using (var client = _clientFactory.CreateClient())
                 {
-                    using (var response = await client.SendAsync(request))
+                    using (var response = await client.SendAsync(request, cancellationToken)) 
                     {
                         if (response.IsSuccessStatusCode)
                         {
@@ -139,7 +191,6 @@ namespace Common.CoreUtil
                                 //return new HttpResult(string.Empty, (cookieFlag ? setCookies.ToList() : new List<string>()), true);
                                 return new HttpResult<string>(string.Empty, response.StatusCode, response.IsSuccessStatusCode, cookieFlag ? setCookies.ToArray() : null);
                             }
-
                         }
                         else
                         {
@@ -676,7 +727,7 @@ namespace Common.CoreUtil
 
         }
 
-        public async Task<HttpStreamResultDto> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null)
+        public async Task<HttpStreamResultDto> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, CancellationToken cancellationToken = default, string userAgent = null) 
         {
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
@@ -727,7 +778,7 @@ namespace Common.CoreUtil
                 }
                 using (var client = _clientFactory.CreateClient())
                 {
-                    using (var response = await client.SendAsync(request))
+                    using (var response = await client.SendAsync(request, cancellationToken)) 
                     {
                         if (response.IsSuccessStatusCode)
                         {
@@ -753,7 +804,7 @@ namespace Common.CoreUtil
             }
         }
 
-        public async Task<HttpStreamResultDto> GetStreamAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null) where T : class 
+        public async Task<HttpStreamResultDto> GetStreamAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, CancellationToken cancellationToken = default, string userAgent = null) where T : class 
         {
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
@@ -805,7 +856,7 @@ namespace Common.CoreUtil
                 }
                 using (var client = _clientFactory.CreateClient())
                 {
-                    using (var response = await client.SendAsync(request))
+                    using (var response = await client.SendAsync(request, cancellationToken)) 
                     {
                         if (response.IsSuccessStatusCode)
                         {                            
