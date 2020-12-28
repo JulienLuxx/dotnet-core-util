@@ -52,13 +52,13 @@ namespace Common.Util
             State = state;
         }
 
-        public ResultDto(dynamic data, int state = 200, string message = null)
-        {
-            Data = data;
-            HasData = null != data;
-            Message = message;
-            State = state;
-        }
+        //public ResultDto(dynamic data, int state = 200, string message = null)
+        //{
+        //    Data = data;
+        //    HasData = null != data;
+        //    Message = message;
+        //    State = state;
+        //}
 
         public ResultDto(dynamic data, long state = 200, string message = null)
         {
@@ -123,13 +123,13 @@ namespace Common.Util
             State = state;
         }
 
-        public ResultDto(T data, int state = 200, string message = null) 
-        {
-            Data = data;
-            HasData = null != data;
-            Message = message;
-            State = state;
-        }
+        //public ResultDto(T data, int state = 200, string message = null) 
+        //{
+        //    Data = data;
+        //    HasData = null != data;
+        //    Message = message;
+        //    State = state;
+        //}
 
         public ResultDto(T data, long state = 200, string message = null)
         {
