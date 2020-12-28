@@ -114,9 +114,10 @@ namespace Common.CoreUtil
         /// <param name="url">RequestUrl</param>
         /// <param name="httpMethodStr">RequestHttpMethodString(get/post)</param>
         /// <param name="mediaType">RequestParamMediaType</param>
+        /// <param name="cancellationToken"></param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpStreamResultDto> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null);
+        Task<HttpStreamResultDto> GetStreamAsync(dynamic param, string url, string httpMethodStr, MediaTypeEnum mediaType, CancellationToken cancellationToken = default, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage,GetResultInStream(Suppot use DescriptionAttribute in param)
@@ -126,8 +127,9 @@ namespace Common.CoreUtil
         /// <param name="url">RequestUrl</param>
         /// <param name="httpMethodStr">RequestHttpMethodString(get/post)</param>
         /// <param name="mediaType">RequestParamMediaType</param>
+        /// <param name="cancellationToken"></param>
         /// <param name="userAgent">RequestHeaderUserAgent</param>
         /// <returns></returns>
-        Task<HttpStreamResultDto> GetStreamAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, string userAgent = null) where T : class;
+        Task<HttpStreamResultDto> GetStreamAsync<T>(T param, string url, string httpMethodStr, MediaTypeEnum mediaType, CancellationToken cancellationToken = default, string userAgent = null) where T : class;
     }
 }
