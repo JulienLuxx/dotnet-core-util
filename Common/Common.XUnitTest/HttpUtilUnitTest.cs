@@ -9,6 +9,7 @@ using System.IO;
 using System.ComponentModel;
 using Newtonsoft.Json;
 using System.Reflection;
+using Microsoft.AspNetCore.Http;
 
 namespace Common.XUnitTest
 {
@@ -246,7 +247,12 @@ namespace Common.XUnitTest
         [Fact]
         public async Task FomFileUploadTest()
         {
-            var result = await _httpClientUtil.SendAsync(new object(), MediaTypeEnum.MultipartFormData, "http://localhost:5010/upload/uploadsmallfile", "post");
+            var filePath = @"D:\doc\233.txt";
+            using (var fileStream=new FileStream(filePath,FileMode.Open))
+            {
+                var result = await _httpClientUtil.PostFileAsync<dynamic>(fileStream, "233.txt", null, @"http://localhost:5010/upload/uploadsmallfile");
+                Assert.True(result.IsSuccess);
+            }
         }
     }
 }
