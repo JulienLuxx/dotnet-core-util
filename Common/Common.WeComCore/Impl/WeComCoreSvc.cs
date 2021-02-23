@@ -56,5 +56,28 @@ namespace Common.WeComCore
                 return new WeComBaseResultDto(result.ResultCode.GetHashCode(), "Internet Error");
             }
         }
+
+        public async Task<IWeComResultDto> UploadMediaAsync(UploadMediaParam param, Stream stream, string fileName, string url, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
+            {
+                return new WeComBaseResultDto(-99, "NullUrl");
+            }
+            var result = await _httpUtil.PostFileAsync(stream, fileName, param, url, "media", cancellationToken);
+            if (result.IsSuccess)
+            {
+                var baseDto = JsonConvert.DeserializeObject<WeComBaseResultDto>(result.Result);
+                if (baseDto.ErrCode == 0)
+                {
+                    var dto = JsonConvert.DeserializeObject<UploadMediaResultDto>(result.Result);
+                    return dto;
+                }
+                return baseDto;
+            }
+            else
+            {
+                return new WeComBaseResultDto(result.ResultCode.GetHashCode(), "Internet Error");
+            }
+        }
     }
 }
