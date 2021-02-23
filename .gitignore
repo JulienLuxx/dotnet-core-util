@@ -17,3 +17,4 @@
 /Common/Common.XUnitTest/bin/Release/netcoreapp2.2
 /Common/Common.XUnitTest/bin/Debug/netcoreapp3.1
 /Common/Common.WeConCore/obj
+/Common/Common.WeConCore/bin/Debug/netstandard2.0
