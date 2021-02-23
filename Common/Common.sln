@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Util", "Common.Util\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.CoreUtil", "Common.CoreUtil\Common.CoreUtil.csproj", "{7CF1888D-1EE1-4A42-9D9D-C692500EBCB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.XUnitTest", "Common.XUnitTest\Common.XUnitTest.csproj", "{EB094702-08B0-440E-9EE0-011F41318C71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.XUnitTest", "Common.XUnitTest\Common.XUnitTest.csproj", "{EB094702-08B0-440E-9EE0-011F41318C71}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.WeComCore", "Common.WeComCore\Common.WeComCore.csproj", "{097E982D-A09D-48B4-9E30-B289573879F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{EB094702-08B0-440E-9EE0-011F41318C71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB094702-08B0-440E-9EE0-011F41318C71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB094702-08B0-440E-9EE0-011F41318C71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{097E982D-A09D-48B4-9E30-B289573879F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{097E982D-A09D-48B4-9E30-B289573879F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{097E982D-A09D-48B4-9E30-B289573879F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{097E982D-A09D-48B4-9E30-B289573879F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
