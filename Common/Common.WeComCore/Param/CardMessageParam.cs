@@ -27,6 +27,17 @@ namespace Common.WeComCore
 
         [JsonProperty("enable_id_trans")]
         public int EnableIdTrans { get; set; }
+
+        [JsonProperty("enable_duplicate_check")]
+        public int EnableDuplicateCheck { get; set; }
+
+        [JsonProperty("duplicate_check_interval")]
+        public int DuplicateCheckInterval { get; set; }
+
+        public CardMessageParam() 
+        {
+            DuplicateCheckInterval = 1800;
+        }
     }
 
     public class TextCard
