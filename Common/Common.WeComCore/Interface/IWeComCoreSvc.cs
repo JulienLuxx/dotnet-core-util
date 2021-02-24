@@ -13,6 +13,8 @@ namespace Common.WeComCore
 
         Task<IWeComResultDto> GetUserIdAsync(GetUserIdParam param, string url, CancellationToken cancellationToken = default);
 
+        Task<IWeComResultDto> PushMessageAsync(CardMessageParam param, string accessToken, string url, CancellationToken cancellationToken = default);
+
         Task<IWeComResultDto> UploadMediaAsync(UploadMediaParam param, Stream stream, string fileName, string url, CancellationToken cancellationToken = default);
     }
 }

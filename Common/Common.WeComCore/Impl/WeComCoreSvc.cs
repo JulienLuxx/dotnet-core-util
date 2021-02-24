@@ -57,7 +57,41 @@ namespace Common.WeComCore
             }
         }
 
-        public async Task<IWeComResultDto> UploadMediaAsync(UploadMediaParam param, Stream stream, string fileName, string url, CancellationToken cancellationToken = default)
+        public virtual async Task<IWeComResultDto> PushMessageAsync(CardMessageParam param, string accessToken, string url, CancellationToken cancellationToken = default) 
+        {
+            if (null == param) 
+            {
+                return new WeComBaseResultDto(-99, "NullParam");
+            }
+            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrWhiteSpace(accessToken)) 
+            {
+                return new WeComBaseResultDto(-99, "NullAccessToken");
+            }
+            if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
+            {
+                return new WeComBaseResultDto(-99, "NullUrl");
+            }
+            //url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + accessToken + "";//微信推送接口地址
+            url = url + accessToken;
+
+            var result = await _httpUtil.SendAsync(param, MediaTypeEnum.ApplicationJson, url, "post", cancellationToken: cancellationToken);
+            if (result.IsSuccess)
+            {
+                var baseDto = JsonConvert.DeserializeObject<WeComBaseResultDto>(result.Result);
+                if (baseDto.ErrCode == 0)
+                {
+                    var dto = JsonConvert.DeserializeObject<PushMessageResultDto>(result.Result);
+                    return dto;
+                }
+                return baseDto;
+            }
+            else
+            {
+                return new WeComBaseResultDto(result.ResultCode.GetHashCode(), "网络异常");
+            }
+        }
+
+        public virtual async Task<IWeComResultDto> UploadMediaAsync(UploadMediaParam param, Stream stream, string fileName, string url, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
             {
