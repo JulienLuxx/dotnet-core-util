@@ -20,3 +20,6 @@
 /Common/Common.WeConCore/bin/Debug/netstandard2.0
 /Common/Common.WeComCore/bin/Debug/netstandard2.0
 /Common/Common.WeComCore/obj
+/Common/Common.WeComCore/bin/Release/netstandard2.0
+/Common/Common.WeComCore/Properties/PublishProfiles
+/Common/Common.WeComCore/Common.WeComCore.csproj.user
