@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.XUnitTest", "Common.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.WeComCore", "Common.WeComCore\Common.WeComCore.csproj", "{097E982D-A09D-48B4-9E30-B289573879F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.AliSMSCore", "Common.AliSMSCore\Common.AliSMSCore.csproj", "{084B193B-FE2B-4A04-85CC-77A44CA2B347}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{097E982D-A09D-48B4-9E30-B289573879F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{097E982D-A09D-48B4-9E30-B289573879F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{097E982D-A09D-48B4-9E30-B289573879F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{084B193B-FE2B-4A04-85CC-77A44CA2B347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{084B193B-FE2B-4A04-85CC-77A44CA2B347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{084B193B-FE2B-4A04-85CC-77A44CA2B347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{084B193B-FE2B-4A04-85CC-77A44CA2B347}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
