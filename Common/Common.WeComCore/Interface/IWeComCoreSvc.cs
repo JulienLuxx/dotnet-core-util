@@ -11,6 +11,10 @@ namespace Common.WeComCore
     {
         Task<IWeComResultDto> GetAccessTokenAsync(AccessTokenParam param, string url, CancellationToken cancellationToken = default);
 
+        Task<IWeComResultDto> GetAppJsApiTicketAsync(JsApiTicketAppParam param, string url, CancellationToken cancellationToken = default);
+
+        Task<IWeComResultDto> GetEnterpriseJsApiTicketAsync(JsApiTicketEnterpriseParam param, string url, CancellationToken cancellationToken = default);
+
         Task<IWeComResultDto> GetUserIdAsync(GetUserIdParam param, string url, CancellationToken cancellationToken = default);
 
         Task<IWeComResultDto> PushMessageAsync(CardMessageParam param, string accessToken, string url, CancellationToken cancellationToken = default);

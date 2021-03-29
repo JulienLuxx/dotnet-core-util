@@ -34,6 +34,44 @@ namespace Common.WeComCore
             }
         }
 
+        public async Task<IWeComResultDto> GetAppJsApiTicketAsync(JsApiTicketAppParam param, string url, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
+            {
+                return new WeComBaseResultDto(-99, "NullUrl");
+            }
+            var result = await _httpUtil.SendAsync(param, MediaTypeEnum.UrlQuery, url, "get", cancellationToken: cancellationToken);
+            if (result.IsSuccess)
+            {
+                var dto = JsonConvert.DeserializeObject<JsApiTicketResultDto>(result.Result);
+                return dto;
+            }
+            else
+            {
+                return new WeComBaseResultDto(result.ResultCode.GetHashCode(), "Internet Error");
+            }
+        }
+
+        public async Task<IWeComResultDto> GetEnterpriseJsApiTicketAsync(JsApiTicketEnterpriseParam param, string url, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
+            {
+                return new WeComBaseResultDto(-99, "NullUrl");
+            }
+            var result = await _httpUtil.SendAsync(param, MediaTypeEnum.UrlQuery, url, "get", cancellationToken: cancellationToken);
+            if (result.IsSuccess)
+            {
+                var dto = JsonConvert.DeserializeObject<JsApiTicketResultDto>(result.Result);
+                return dto;
+            }
+            else
+            {
+                return new WeComBaseResultDto(result.ResultCode.GetHashCode(), "Internet Error");
+            }
+        }
+
+
+
         public virtual async Task<IWeComResultDto> GetUserIdAsync(GetUserIdParam param, string url, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
