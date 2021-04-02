@@ -33,6 +33,17 @@ namespace Common.CoreUtil
         }
 
         /// <summary>
+        /// Register Common.Util.IGPSUtil to IServiceCollection
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddGPSUtil(this IServiceCollection services)
+        {
+            services.AddScoped<IGPSUtil, GPSUtil>();
+            return services;
+        }
+
+        /// <summary>
         /// Register HttpClientUtil to IServiceCollection
         /// </summary>
         /// <param name="services"></param>
