@@ -55,6 +55,18 @@ namespace Common.Util
 
         #endregion
 
+        #region SHA1
+
+        public string GetSHA1(string value, Encoding encoding) 
+        {
+            var valueArray = encoding.GetBytes(value);
+            var dataArray = new SHA1CryptoServiceProvider().ComputeHash(valueArray);
+            var hash = BitConverter.ToString(dataArray).Replace("-", string.Empty);
+            return hash.ToLower();
+        }
+
+        #endregion
+
         public bool GetLongByGuid(out long num)
         {
             try
