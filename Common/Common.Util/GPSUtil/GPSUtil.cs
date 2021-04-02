@@ -8,6 +8,7 @@ namespace Common.Util
     {
         public decimal CalculateDistance(double lng, double lat, double dlng, double dlat)
         {
+            const double R = 6378.137;
             var radLatBegin = lat * Math.PI / 180;
             var radLatEnd = dlat * Math.PI / 180;
             var radLatDiff = radLatBegin - radLatEnd;
