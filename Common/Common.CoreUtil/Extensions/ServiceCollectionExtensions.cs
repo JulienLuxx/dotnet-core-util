@@ -8,7 +8,7 @@ using System.Net.Http;
 
 namespace Common.CoreUtil
 {
-    public static class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
         /// <summary>
         /// Register Common.Util.IMapUtil to IServiceCollection
