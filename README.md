@@ -5,4 +5,4 @@ This is some common use util class encapsulation for .Net framework and .Net Cor
 
 ## Common.CoreUtil
 This is some common use util class base on Common.Util encapsulation only for .Net Core.<br/>
-Now,it's include HttpUtil,MultipartRequestHelper etc util class.
+Now,it's include HttpClentUtil,MultipartRequestHelper etc util class.
