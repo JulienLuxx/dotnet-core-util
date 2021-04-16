@@ -19,5 +19,7 @@ namespace Common.Util
         bool GetLongByGuid(out long num);
 
         bool GetLongByGuid(Guid guid, out long num);
+
+        long GetNowTimestamp(DateTime? date = null);
     }
 }

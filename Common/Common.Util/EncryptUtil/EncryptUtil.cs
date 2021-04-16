@@ -101,5 +101,13 @@ namespace Common.Util
                 return false;
             }
         }
+
+        public long GetNowTimestamp(DateTime? date = null)
+        {
+            date = date.HasValue ? date : DateTime.Now;
+            var ts = date.Value.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            var lts = (long)ts.TotalSeconds;
+            return lts;
+        }
     }
 }
