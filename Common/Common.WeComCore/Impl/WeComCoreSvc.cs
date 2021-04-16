@@ -1,4 +1,5 @@
 ﻿using Common.CoreUtil;
+using Common.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,35 @@ namespace Common.WeComCore
 {
     public class WeComCoreSvc : BaseHttpSvc, IWeComCoreSvc
     {
-        public WeComCoreSvc(IHttpClientUtil httpClientUtil) : base(httpClientUtil)
+        private readonly IEncryptUtil _encryptUtil;
+        public WeComCoreSvc(IEncryptUtil encryptUtil, IHttpClientUtil httpClientUtil) : base(httpClientUtil) 
         {
+            _encryptUtil = encryptUtil;
+        }
+
+        public IWeComResultDto CalculatorSignature(CalculateSignatureParam param)
+        {
+            if (string.IsNullOrEmpty(param.Url) || string.IsNullOrWhiteSpace(param.Url))
+            {
+                return new WeComBaseResultDto(-99, "NullUrl");
+            }
+            var resultDto = new SignatureResultDto
+            {
+                ErrCode = 0,
+                ErrMsg = string.Empty,
+                Signature = new SignatureDto()
+                {
+                    AgentId = param.AgentId,
+                    CorpId = param.CorpId,
+                    NonceStr = Guid.NewGuid().ToString(),
+                    Ticket = param.Ticket,
+                    Timestamp = _encryptUtil.GetNowTimestamp()
+                }
+            };
+            var url = param.Url.IndexOf('#') > 0 ? param.Url.Remove(param.Url.IndexOf('#')) : param.Url;
+            var JmData = "jsapi_ticket=" + resultDto.Signature.Ticket + "&noncestr=" + resultDto.Signature.NonceStr + "&timestamp=" + resultDto.Signature.Timestamp + "&url=" + url;
+            resultDto.Signature.Signature = _encryptUtil.GetSHA1(JmData, Encoding.ASCII);
+            return resultDto;
         }
 
         public virtual async Task<IWeComResultDto> GetAccessTokenAsync(AccessTokenParam param, string url, CancellationToken cancellationToken = default)
@@ -69,8 +97,6 @@ namespace Common.WeComCore
                 return new WeComBaseResultDto(result.ResultCode.GetHashCode(), "Internet Error");
             }
         }
-
-
 
         public virtual async Task<IWeComResultDto> GetUserIdAsync(GetUserIdParam param, string url, CancellationToken cancellationToken = default)
         {

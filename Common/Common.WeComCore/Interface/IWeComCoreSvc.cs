@@ -9,6 +9,8 @@ namespace Common.WeComCore
 {
     public interface IWeComCoreSvc
     {
+        IWeComResultDto CalculatorSignature(CalculateSignatureParam param);
+
         Task<IWeComResultDto> GetAccessTokenAsync(AccessTokenParam param, string url, CancellationToken cancellationToken = default);
 
         Task<IWeComResultDto> GetAppJsApiTicketAsync(JsApiTicketAppParam param, string url, CancellationToken cancellationToken = default);
