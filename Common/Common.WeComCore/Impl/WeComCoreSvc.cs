@@ -39,8 +39,8 @@ namespace Common.WeComCore
                 }
             };
             var url = param.Url.IndexOf('#') > 0 ? param.Url.Remove(param.Url.IndexOf('#')) : param.Url;
-            var JmData = "jsapi_ticket=" + resultDto.Signature.Ticket + "&noncestr=" + resultDto.Signature.NonceStr + "&timestamp=" + resultDto.Signature.Timestamp + "&url=" + url;
-            resultDto.Signature.Signature = _encryptUtil.GetSHA1(JmData, Encoding.ASCII);
+            var rawData = string.Format("jsapi_ticket={0}&noncestr={1}&timestamp={2}&url={3}", resultDto.Signature.Ticket, resultDto.Signature.NonceStr, resultDto.Signature.Timestamp, url);
+            resultDto.Signature.Signature = _encryptUtil.GetSHA1(rawData, Encoding.ASCII);
             return resultDto;
         }
 
