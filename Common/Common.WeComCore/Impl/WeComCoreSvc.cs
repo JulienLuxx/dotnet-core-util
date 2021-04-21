@@ -19,7 +19,7 @@ namespace Common.WeComCore
             _encryptUtil = encryptUtil;
         }
 
-        public IWeComResultDto CalculatorSignature(CalculateSignatureParam param)
+        public IWeComResultDto CalculateSignature(CalculateSignatureParam param)
         {
             if (string.IsNullOrEmpty(param.Url) || string.IsNullOrWhiteSpace(param.Url))
             {
