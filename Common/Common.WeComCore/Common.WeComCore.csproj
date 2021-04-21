@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,7 +11,7 @@
     <FileVersion>0.0.3.0</FileVersion>
     <Description>
       This is some class encapsulation for WeComServiceAPI, only support .Net Core.
-      Now,it's include getaccesstoken,getuserid,getAPIticke,calculatesignature,pushmessage,uploadmedia etc Service API.
+      Now,it's include getaccesstoken,getuserid,getAPIticket,calculatesignature,pushmessage,uploadmedia etc Service API.
     </Description>
   </PropertyGroup>
 
