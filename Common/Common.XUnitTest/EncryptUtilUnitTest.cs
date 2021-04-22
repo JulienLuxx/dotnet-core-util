@@ -27,6 +27,13 @@ namespace Common.XUnitTest
         }
 
         [Fact]
+        public void CreateRandomCode()
+        {
+            var result = _encryptUtil.CreateRandomCode(6, false);
+            Assert.Equal(6, result.Length);
+        }
+
+        [Fact]
         public void GetLongByGuidTest()
         {
             var flag= _encryptUtil.GetLongByGuid(out var num);
