@@ -67,6 +67,41 @@ namespace Common.Util
 
         #endregion
 
+        public string CreateRandomCode(int codeLength, bool isPurelyNumerical=true) 
+        {
+            var chars = string.Empty;
+            var sum = 0;
+            if (isPurelyNumerical)
+            {
+                chars = "0,1,2,3,4,5,6,7,8,9";
+                sum = 10;
+            }
+            else 
+            {
+                chars= "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
+                sum = 35;
+            }
+            var charsArray = chars.Split(',');
+            var temp = -1;
+            var randomCode = string.Empty;
+            var random = new Random();
+            for (int i = 0; i < codeLength; i++)
+            {
+                if (-1 != temp)
+                {
+                    random = new Random(i * temp * ((int)DateTime.Now.Ticks));
+                }
+                var t = random.Next(sum);
+                if (temp==t)
+                {
+                    return CreateRandomCode(codeLength);
+                }
+                temp = t;
+                randomCode += charsArray[t];
+            }
+            return randomCode;
+        }
+
         public bool GetLongByGuid(out long num)
         {
             try
