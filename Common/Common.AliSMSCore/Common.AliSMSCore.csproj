@@ -9,4 +9,8 @@
     <PackageReference Include="aliyun-net-sdk-dysmsapi" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Common.CoreUtil\Common.CoreUtil.csproj" />
+  </ItemGroup>
+
 </Project>
