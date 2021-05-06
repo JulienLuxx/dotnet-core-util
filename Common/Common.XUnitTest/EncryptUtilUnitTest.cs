@@ -27,6 +27,13 @@ namespace Common.XUnitTest
         }
 
         [Fact]
+        public void CreateRandomCode()
+        {
+            var result = _encryptUtil.CreateRandomCode(6, false);
+            Assert.Equal(6, result.Length);
+        }
+
+        [Fact]
         public void GetLongByGuidTest()
         {
             var flag= _encryptUtil.GetLongByGuid(out var num);
@@ -38,6 +45,13 @@ namespace Common.XUnitTest
         {
             var flag = _encryptUtil.GetLongByGuid(Guid.NewGuid(), out var num);
             Assert.True(flag);
+        }
+
+        [Fact]
+        public void GetRuntimePath()
+        {
+            var path = FileHelper.GetLinuxPath("D:\\WebSite\\MobileServerFri /upload /20210423 /Common.WeComCore.0.0.3.nupkg");
+            Assert.True(false);
         }
     }
 }

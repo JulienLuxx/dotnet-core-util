@@ -32,14 +32,19 @@ namespace Common.CoreUtil
 
         public async Task<IHttpResult<string>> PostFileAsync<T>(Stream stream, string fileName, T param, string url, string contentName = "files", CancellationToken cancellationToken = default, Encoding encoding = null) 
         {
-            var paramDict = _mapUtil.DynamicToDictionary(param);
             var boundary= string.Format("--{0}", DateTime.Now.Ticks.ToString("x"));
             var content = new MultipartFormDataContent(boundary);
             content.Add(new StreamContent(stream, (int)stream.Length), contentName, fileName);
-            foreach (var item in paramDict)
+
+            if (null != param)
             {
-                content.Add(new StringContent(item.Value), item.Key);
+                var paramDict = _mapUtil.DynamicToDictionary(param);
+                foreach (var item in paramDict)
+                {
+                    content.Add(new StringContent(item.Value), item.Key);
+                }
             }
+
             using (var client=_clientFactory.CreateClient())
             {
                 using (var response = await client.PostAsync(url, content, cancellationToken)) 
@@ -90,55 +95,66 @@ namespace Common.CoreUtil
             }
         }
 
-        public async Task<IHttpResult<string>> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, CancellationToken cancellationToken = default, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null) 
+        public async Task<IHttpResult<string>> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, CancellationToken cancellationToken = default, Encoding encoding = null, string jwt = null, string[] cookiesArray = null, string userAgent = null) 
         {
             var httpMethod = new HttpMethod(httpMethodStr);
             using (var request = new HttpRequestMessage(httpMethod, @url))
             {
-                var paramDict = _mapUtil.DynamicToDictionary(param);
-                if (HttpMethod.Get.Equals(httpMethod))
+                if (null != param)
                 {
-                    switch (mediaType)
+                    var paramDict = _mapUtil.DynamicToDictionary(param);
+                    if (HttpMethod.Get.Equals(httpMethod))
                     {
-                        case MediaTypeEnum.UrlQuery:
-                            var paramUrl = QueryHelpers.AddQueryString(@url, paramDict);
-                            request.RequestUri = new Uri(paramUrl);
-                            break;
-                        case MediaTypeEnum.ApplicationFormUrlencoded:
-                            request.Content = new FormUrlEncodedContent(paramDict);
-                            break;
+                        switch (mediaType)
+                        {
+                            case MediaTypeEnum.UrlQuery:
+                                var paramUrl = QueryHelpers.AddQueryString(@url, paramDict);
+                                request.RequestUri = new Uri(paramUrl);
+                                break;
+                            case MediaTypeEnum.ApplicationFormUrlencoded:
+                                request.Content = new FormUrlEncodedContent(paramDict);
+                                break;
+                        }
+                    }
+                    else if (HttpMethod.Post.Equals(httpMethod))
+                    {
+                        switch (mediaType)
+                        {
+                            case MediaTypeEnum.ApplicationFormUrlencoded:
+                                request.Content = new FormUrlEncodedContent(paramDict);
+                                break;
+                            case MediaTypeEnum.ApplicationJson:
+                                var jsonParam = JsonConvertOptionEnum.NewtonSoftJson == jsonConvertOption ? JsonConvert.SerializeObject(param) : System.Text.Json.JsonSerializer.Serialize(param);
+                                request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
+                                break;
+                            case MediaTypeEnum.MultipartFormData:
+                                var content = new MultipartFormDataContent();
+                                foreach (var item in paramDict)
+                                {
+                                    content.Add(new StringContent(item.Value), item.Key);
+                                }
+                                request.Content = content;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
                     }
                 }
-                else if(HttpMethod.Post.Equals(httpMethod))
-                {
-                    switch (mediaType)
-                    {
-                        case MediaTypeEnum.ApplicationFormUrlencoded:
-                            request.Content = new FormUrlEncodedContent(paramDict);
-                            break;
-                        case MediaTypeEnum.ApplicationJson:
-                            var jsonParam = JsonConvertOptionEnum.NewtonSoftJson == jsonConvertOption ? JsonConvert.SerializeObject(param) : System.Text.Json.JsonSerializer.Serialize(param);
-                            request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
-                            break;
-                        case MediaTypeEnum.MultipartFormData:
-                            var content = new MultipartFormDataContent();
-                            foreach (var item in paramDict)
-                            {
-                                content.Add(new StringContent(item.Value), item.Key);
-                            }
-                            request.Content = content;
-                            break;
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+
 
                 if (null != cookiesArray && cookiesArray.Any())
                 {
                     request.Headers.Add("Set-Cookie", cookiesArray);
                 }
+                else if (!string.IsNullOrEmpty(jwt) && !string.IsNullOrWhiteSpace(jwt))
+                {
+                    //var tokenString = string.Format("Bearer {0}", jwt);
+                    //request.Headers.Add("Authorization", tokenString);
+                    request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt);
+                }
+
                 if (!string.IsNullOrEmpty(userAgent) && !string.IsNullOrWhiteSpace(userAgent))
                 {
                     request.Headers.UserAgent.ParseAdd(userAgent);
@@ -731,47 +747,52 @@ namespace Common.CoreUtil
         {
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
-            var paramDict = _mapUtil.DynamicToDictionary(param);
+
             using (var request = new HttpRequestMessage(httpMethod, @url))
             {
-                if (HttpMethod.Get.Equals(httpMethod))
+                if (null != param)
                 {
-                    switch (mediaType)
+                    var paramDict = _mapUtil.DynamicToDictionary(param);
+                    if (HttpMethod.Get.Equals(httpMethod))
                     {
-                        case MediaTypeEnum.UrlQuery:
-                            url = QueryHelpers.AddQueryString(url, paramDict);
-                            request.RequestUri = new Uri(url);
-                            break;
-                        case MediaTypeEnum.ApplicationFormUrlencoded:
-                            request.Content = new FormUrlEncodedContent(paramDict);
-                            break;
+                        switch (mediaType)
+                        {
+                            case MediaTypeEnum.UrlQuery:
+                                url = QueryHelpers.AddQueryString(url, paramDict);
+                                request.RequestUri = new Uri(url);
+                                break;
+                            case MediaTypeEnum.ApplicationFormUrlencoded:
+                                request.Content = new FormUrlEncodedContent(paramDict);
+                                break;
+                        }
+                    }
+                    else if (HttpMethod.Post.Equals(httpMethod))
+                    {
+                        switch (mediaType)
+                        {
+                            case MediaTypeEnum.ApplicationFormUrlencoded:
+                                request.Content = new FormUrlEncodedContent(paramDict);
+                                break;
+                            case MediaTypeEnum.ApplicationJson:
+                                var jsonParam = JsonConvert.SerializeObject(param);
+                                request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
+                                break;
+                            case MediaTypeEnum.MultipartFormData:
+                                var content = new MultipartFormDataContent();
+                                foreach (var item in paramDict)
+                                {
+                                    content.Add(new StringContent(item.Value), item.Key);
+                                }
+                                request.Content = content;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
                     }
                 }
-                else if (HttpMethod.Post.Equals(httpMethod))
-                {
-                    switch (mediaType)
-                    {
-                        case MediaTypeEnum.ApplicationFormUrlencoded:
-                            request.Content = new FormUrlEncodedContent(paramDict);
-                            break;
-                        case MediaTypeEnum.ApplicationJson:
-                            var jsonParam = JsonConvert.SerializeObject(param);
-                            request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
-                            break;
-                        case MediaTypeEnum.MultipartFormData:
-                            var content = new MultipartFormDataContent();
-                            foreach (var item in paramDict)
-                            {
-                                content.Add(new StringContent(item.Value), item.Key);
-                            }
-                            request.Content = content;
-                            break;
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+
                 if (!string.IsNullOrEmpty(userAgent) && !string.IsNullOrWhiteSpace(userAgent))
                 {
                     request.Headers.UserAgent.ParseAdd(userAgent);
@@ -808,48 +829,53 @@ namespace Common.CoreUtil
         {
             httpMethodStr = httpMethodStr.ToUpper();
             var httpMethod = new HttpMethod(httpMethodStr);
-            var paramDict = _mapUtil.DynamicToDictionary(param);
+
             var memoryStream = new MemoryStream();
             using (var request = new HttpRequestMessage(httpMethod, url))
             {
-                if (HttpMethod.Get.Equals(httpMethod))
+                if (null!=param)
                 {
-                    switch (mediaType)
+                    var paramDict = _mapUtil.DynamicToDictionary(param);
+                    if (HttpMethod.Get.Equals(httpMethod))
                     {
-                        case MediaTypeEnum.UrlQuery:
-                            url = QueryHelpers.AddQueryString(url, paramDict);
-                            request.RequestUri = new Uri(url);
-                            break;
-                        case MediaTypeEnum.ApplicationFormUrlencoded:
-                            request.Content = new FormUrlEncodedContent(paramDict);
-                            break;
+                        switch (mediaType)
+                        {
+                            case MediaTypeEnum.UrlQuery:
+                                url = QueryHelpers.AddQueryString(url, paramDict);
+                                request.RequestUri = new Uri(url);
+                                break;
+                            case MediaTypeEnum.ApplicationFormUrlencoded:
+                                request.Content = new FormUrlEncodedContent(paramDict);
+                                break;
+                        }
+                    }
+                    else if (HttpMethod.Post.Equals(httpMethod))
+                    {
+                        switch (mediaType)
+                        {
+                            case MediaTypeEnum.ApplicationFormUrlencoded:
+                                request.Content = new FormUrlEncodedContent(paramDict);
+                                break;
+                            case MediaTypeEnum.ApplicationJson:
+                                var jsonParam = JsonConvert.SerializeObject(param);
+                                request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
+                                break;
+                            case MediaTypeEnum.MultipartFormData:
+                                var content = new MultipartFormDataContent();
+                                foreach (var item in paramDict)
+                                {
+                                    content.Add(new StringContent(item.Value), item.Key);
+                                }
+                                request.Content = content;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
                     }
                 }
-                else if (HttpMethod.Post.Equals(httpMethod))
-                {
-                    switch (mediaType)
-                    {
-                        case MediaTypeEnum.ApplicationFormUrlencoded:
-                            request.Content = new FormUrlEncodedContent(paramDict);
-                            break;
-                        case MediaTypeEnum.ApplicationJson:
-                            var jsonParam = JsonConvert.SerializeObject(param);
-                            request.Content = new StringContent(jsonParam, Encoding.UTF8, "application/json");
-                            break;
-                        case MediaTypeEnum.MultipartFormData:
-                            var content = new MultipartFormDataContent();
-                            foreach (var item in paramDict)
-                            {
-                                content.Add(new StringContent(item.Value), item.Key);
-                            }
-                            request.Content = content;
-                            break;
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+
                 if (!string.IsNullOrEmpty(userAgent) && !string.IsNullOrWhiteSpace(userAgent))
                 {
                     request.Headers.UserAgent.ParseAdd(userAgent);

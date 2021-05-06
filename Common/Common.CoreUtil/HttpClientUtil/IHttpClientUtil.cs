@@ -11,10 +11,22 @@ namespace Common.CoreUtil
 {
     public interface IHttpClientUtil: IDependency
     {
+        /// <summary>
+        /// Async post send file(Suppot use DescriptionAttribute in param class)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stream"></param>
+        /// <param name="fileName"></param>
+        /// <param name="param"></param>
+        /// <param name="url"></param>
+        /// <param name="contentName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
         Task<IHttpResult<string>> PostFileAsync<T>(Stream stream, string fileName, T param, string url, string contentName = "files", CancellationToken cancellationToken = default, Encoding encoding = null);
 
         /// <summary>
-        /// AsyncSendPackage(Suppot use DescriptionAttribute in param)
+        /// Async send http package(Suppot use DescriptionAttribute in param class)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="param"></param>
@@ -22,11 +34,13 @@ namespace Common.CoreUtil
         /// <param name="url"></param>
         /// <param name="httpMethodStr"></param>
         /// <param name="jsonConvertOption"></param>
+        /// <param name="cancellationToken"></param>
         /// <param name="encoding"></param>
-        /// <param name="cookiesArray"></param>
-        /// <param name="userAgent"></param>
+        /// <param name="jwt">JWT Token</param>
+        /// <param name="cookiesArray">RequestCookieStringArray</param>
+        /// <param name="userAgent">UserAgentString</param>
         /// <returns></returns>
-        Task<IHttpResult<string>> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, CancellationToken cancellationToken = default, Encoding encoding = null, string[] cookiesArray = null, string userAgent = null);
+        Task<IHttpResult<string>> SendAsync<T>(T param, MediaTypeEnum mediaType, string url, string httpMethodStr, JsonConvertOptionEnum jsonConvertOption = JsonConvertOptionEnum.NewtonSoftJson, CancellationToken cancellationToken = default, Encoding encoding = null, string jwt = null, string[] cookiesArray = null, string userAgent = null);
 
         /// <summary>
         /// AsyncSendPackage(Not suppot use DescriptionAttribute in param)

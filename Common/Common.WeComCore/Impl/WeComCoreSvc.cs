@@ -1,4 +1,5 @@
 ﻿using Common.CoreUtil;
+using Common.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,35 @@ namespace Common.WeComCore
 {
     public class WeComCoreSvc : BaseHttpSvc, IWeComCoreSvc
     {
-        public WeComCoreSvc(IHttpClientUtil httpClientUtil) : base(httpClientUtil)
+        private readonly IEncryptUtil _encryptUtil;
+        public WeComCoreSvc(IEncryptUtil encryptUtil, IHttpClientUtil httpClientUtil) : base(httpClientUtil) 
         {
+            _encryptUtil = encryptUtil;
+        }
+
+        public IWeComResultDto CalculateSignature(CalculateSignatureParam param)
+        {
+            if (string.IsNullOrEmpty(param.Url) || string.IsNullOrWhiteSpace(param.Url))
+            {
+                return new WeComBaseResultDto(-99, "NullUrl");
+            }
+            var resultDto = new SignatureResultDto
+            {
+                ErrCode = 0,
+                ErrMsg = string.Empty,
+                Signature = new SignatureDto()
+                {
+                    AgentId = param.AgentId,
+                    CorpId = param.CorpId,
+                    NonceStr = Guid.NewGuid().ToString(),
+                    Ticket = param.Ticket,
+                    Timestamp = _encryptUtil.GetNowTimestamp()
+                }
+            };
+            var url = param.Url.IndexOf('#') > 0 ? param.Url.Remove(param.Url.IndexOf('#')) : param.Url;
+            var rawData = string.Format("jsapi_ticket={0}&noncestr={1}&timestamp={2}&url={3}", resultDto.Signature.Ticket, resultDto.Signature.NonceStr, resultDto.Signature.Timestamp, url);
+            resultDto.Signature.Signature = _encryptUtil.GetSHA1(rawData, Encoding.ASCII);
+            return resultDto;
         }
 
         public virtual async Task<IWeComResultDto> GetAccessTokenAsync(AccessTokenParam param, string url, CancellationToken cancellationToken = default)
@@ -26,6 +54,42 @@ namespace Common.WeComCore
             if (result.IsSuccess)
             {
                 var dto = JsonConvert.DeserializeObject<AccessTokenResultDto>(result.Result);
+                return dto;
+            }
+            else
+            {
+                return new WeComBaseResultDto(result.ResultCode.GetHashCode(), "Internet Error");
+            }
+        }
+
+        public async Task<IWeComResultDto> GetAppJsApiTicketAsync(JsApiTicketAppParam param, string url, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
+            {
+                return new WeComBaseResultDto(-99, "NullUrl");
+            }
+            var result = await _httpUtil.SendAsync(param, MediaTypeEnum.UrlQuery, url, "get", cancellationToken: cancellationToken);
+            if (result.IsSuccess)
+            {
+                var dto = JsonConvert.DeserializeObject<JsApiTicketResultDto>(result.Result);
+                return dto;
+            }
+            else
+            {
+                return new WeComBaseResultDto(result.ResultCode.GetHashCode(), "Internet Error");
+            }
+        }
+
+        public async Task<IWeComResultDto> GetEnterpriseJsApiTicketAsync(JsApiTicketEnterpriseParam param, string url, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
+            {
+                return new WeComBaseResultDto(-99, "NullUrl");
+            }
+            var result = await _httpUtil.SendAsync(param, MediaTypeEnum.UrlQuery, url, "get", cancellationToken: cancellationToken);
+            if (result.IsSuccess)
+            {
+                var dto = JsonConvert.DeserializeObject<JsApiTicketResultDto>(result.Result);
                 return dto;
             }
             else

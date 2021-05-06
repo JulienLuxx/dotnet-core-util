@@ -23,4 +23,6 @@
 /Common/Common.WeComCore/bin/Release/netstandard2.0
 /Common/Common.WeComCore/Properties/PublishProfiles
 /Common/Common.WeComCore/Common.WeComCore.csproj.user
+/Common/Common.AliSMSCore/obj
+/Common/Common.AliSMSCore/bin/Debug/netstandard2.0
 /Common/Common.Swagger.Extensions/obj

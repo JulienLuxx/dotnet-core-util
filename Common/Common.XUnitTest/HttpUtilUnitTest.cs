@@ -232,6 +232,14 @@ namespace Common.XUnitTest
         }
 
         [Fact]
+        public async Task SendJWTAsync()
+        {
+            var token = @"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkOGYzM2EyNWEyMTQ0Nzg0OTczMDA5N2EyZWY0ZTc4ZCIsIm5iZiI6IjE2MTgzODYxMjYiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4zIiwiVXNlcklkIjoiMTRlY2M1ZmItMDhkYS00OGM4LTliMjYtYmE4YjJmMGUwN2I4IiwiVXNlck5hbWUiOiJhZG1pbjMiLCJleHAiOjE2MTg0Nzk3MjYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCJ9.5r-sUT-W3YyJ-GFU2_Eb8qi669hOXIsovTbASP1AKYk";
+            var result = await _httpClientUtil.SendAsync<object>(null, MediaTypeEnum.UrlQuery, @"http://121.196.197.36:8035/configdict/page", "get", jwt: token);
+            Assert.True(result.IsSuccess);
+        }
+
+        [Fact]
         public async Task WeComSendTest()
         {
             var param = new WeComAccessTokenParam()
