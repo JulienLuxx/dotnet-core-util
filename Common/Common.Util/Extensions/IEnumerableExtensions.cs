@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Util
 {
@@ -23,6 +24,24 @@ namespace Common.Util
                     yield return element;
                 }
             }
+        }
+
+        public static string JoinString(this IEnumerable<string> source)
+        {
+            var str = string.Empty;
+            if (source.Count() == 1)
+            {
+                str = source.First();
+            }
+            else
+            {
+                foreach (var item in source)
+                {
+                    str += item + ",";
+                }
+                str = str.Remove(str.Length - 1);
+            }
+            return str;
         }
     }
 }

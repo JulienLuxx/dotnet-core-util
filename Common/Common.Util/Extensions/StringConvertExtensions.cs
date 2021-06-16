@@ -7,6 +7,8 @@ namespace Common.Util
 {
     public static class StringConvertExtensions
     {
+        #region
+
         /// <summary>
         ///  StringConvertToDateTimeNullable
         /// </summary>
@@ -88,5 +90,7 @@ namespace Common.Util
         /// <param name="isTrim">WhetherNeedTrim</param>
         /// <returns></returns>
         public static string FilterEmptyWhiteSpaceOrPhrase(this string value, string phrase, bool isTrim = false)  => string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value) || value.Trim().Equals(phrase) ? string.Empty : isTrim ? value.Trim() : value;
+
+        #endregion
     }
 }
