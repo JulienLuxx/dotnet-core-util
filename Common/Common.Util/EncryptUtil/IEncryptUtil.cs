@@ -16,6 +16,14 @@ namespace Common.Util
 
         string GetSHA1(string value, Encoding encoding);
 
+        string AesEncrypt(string value);
+
+        string AesEncrypt(string value, string key);
+
+        string AesDecrypt(string value);
+
+        string AesDecrypt(string value, string key);
+
         string CreateRandomCode(int codeLength, bool isPurelyNumerical = true);
 
         bool GetLongByGuid(out long num);
