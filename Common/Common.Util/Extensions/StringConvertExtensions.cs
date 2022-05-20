@@ -92,5 +92,14 @@ namespace Common.Util
         public static string FilterEmptyWhiteSpaceOrPhrase(this string value, string phrase, bool isTrim = false)  => string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value) || value.Trim().Equals(phrase) ? string.Empty : isTrim ? value.Trim() : value;
 
         #endregion
+
+        /// <summary>
+        /// 安全转换为字符串，去除两端空格，当值为null时返回""
+        /// </summary>
+        /// <param name="input">输入值</param>
+        public static string SafeString(this object input)
+        {
+            return input?.ToString().Trim() ?? string.Empty;
+        }
     }
 }

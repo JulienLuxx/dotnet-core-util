@@ -24,6 +24,14 @@ namespace Common.Util
 
         string AesDecrypt(string value, string key);
 
+        string DesEncrypt(object value);
+
+        string DesEncrypt(object value, string key);
+
+        string DesDecrypt(object value);
+
+        string DesDecrypt(object value, string key);
+
         string CreateRandomCode(int codeLength, bool isPurelyNumerical = true);
 
         bool GetLongByGuid(out long num);

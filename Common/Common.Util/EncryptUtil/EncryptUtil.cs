@@ -205,6 +205,105 @@ namespace Common.Util
 
         #endregion
 
+        #region DES加密
+
+        /// <summary>
+        /// DES密钥,24位字符串
+        /// </summary>
+        public string DesKey = "#s^un2ye21fcv%|f0XpR,+vh";
+
+        /// <summary>
+        /// DES加密
+        /// </summary>
+        /// <param name="value">待加密的值</param>
+        public string DesEncrypt(object value)
+        {
+            return DesEncrypt(value, DesKey);
+        }
+
+        /// <summary>
+        /// DES加密
+        /// </summary>
+        /// <param name="value">待加密的值</param>
+        /// <param name="key">密钥,24位</param>
+        public string DesEncrypt(object value, string key)
+        {
+            return DesEncrypt(value, key, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// DES加密
+        /// </summary>
+        /// <param name="value">待加密的值</param>
+        /// <param name="key">密钥,24位</param>
+        /// <param name="encoding">编码</param>
+        public string DesEncrypt(object value, string key, Encoding encoding)
+        {
+            string text = value.SafeString();
+            if (ValidateDes(text, key) == false)
+                return string.Empty;
+            using (var transform = CreateDesProvider(key).CreateEncryptor())
+            {
+                return GetEncryptResult(text, encoding, transform);
+            }
+        }
+
+        /// <summary>
+        /// 验证Des加密参数
+        /// </summary>
+        private bool ValidateDes(string text, string key)
+        {
+            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(key))
+                return false;
+            return key.Length == 24;
+        }
+
+        /// <summary>
+        /// 创建Des加密服务提供程序
+        /// </summary>
+        private static TripleDESCryptoServiceProvider CreateDesProvider(string key)
+        {
+            return new TripleDESCryptoServiceProvider { Key = Encoding.ASCII.GetBytes(key), Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7 };
+        }
+
+        /// <summary>
+        /// DES解密
+        /// </summary>
+        /// <param name="value">加密后的值</param>
+        public string DesDecrypt(object value)
+        {
+            return DesDecrypt(value, DesKey);
+        }
+
+        /// <summary>
+        /// DES解密
+        /// </summary>
+        /// <param name="value">加密后的值</param>
+        /// <param name="key">密钥,24位</param>
+        public string DesDecrypt(object value, string key)
+        {
+            return DesDecrypt(value, key, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// DES解密
+        /// </summary>
+        /// <param name="value">加密后的值</param>
+        /// <param name="key">密钥,24位</param>
+        /// <param name="encoding">编码</param>
+        public string DesDecrypt(object value, string key, Encoding encoding)
+        {
+            string text = value.SafeString();
+            if (!ValidateDes(text, key))
+                return string.Empty;
+            using (var transform = CreateDesProvider(key).CreateDecryptor())
+            {
+                return GetDecryptResult(text, encoding, transform);
+            }
+        }
+
+        #endregion
+
         public string CreateRandomCode(int codeLength, bool isPurelyNumerical=true) 
         {
             var chars = string.Empty;
