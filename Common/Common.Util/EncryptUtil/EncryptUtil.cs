@@ -92,7 +92,17 @@ namespace Common.Util
         }
 
         /// <summary>
-        /// AES密钥
+        /// SetAESIv
+        /// </summary>
+        /// <param name="IvStr"></param>
+        /// <param name="encoding"></param>
+        private void SetAesIv(string ivStr,Encoding encoding)
+        {
+            _iv = encoding.GetBytes(ivStr);
+        }
+
+        /// <summary>
+        /// AESKey
         /// </summary>
         public string AesKey = "QaP1AF8utIarcBqdhYTZpVGbiNQ9M6IL";
 
@@ -124,11 +134,42 @@ namespace Common.Util
         public string AesEncrypt(string value, string key, Encoding encoding)
         {
             if (string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(key))
+            {
                 return string.Empty;
+            }                
             var rijndaelManaged = CreateRijndaelManaged(key, encoding);
             using (var transform = rijndaelManaged.CreateEncryptor(rijndaelManaged.Key, rijndaelManaged.IV))
             {
                 return GetEncryptResult(value, encoding, transform);
+            }
+        }
+
+        /// <summary>
+        /// AES Encryption
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="key"></param>
+        /// <param name="encoding"></param>
+        /// <param name="ivStr"></param>
+        /// <returns></returns>
+        public string AesEncrypt(string value, string key, Encoding encoding, string ivStr = null)
+        {
+            if (string.IsNullOrEmpty(ivStr) || string.IsNullOrEmpty(ivStr))
+            {
+                return AesEncrypt(value, key, encoding);
+            }
+            else
+            {
+                var newIv = encoding.GetBytes(ivStr);
+                if (string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(key))
+                {
+                    return string.Empty;
+                }
+                var rijndaelManaged = CreateRijndaelManaged(key, encoding, newIv);
+                using (var transform = rijndaelManaged.CreateEncryptor(rijndaelManaged.Key, rijndaelManaged.IV))
+                {
+                    return GetEncryptResult(value, encoding, transform);
+                }
             }
         }
 
@@ -143,6 +184,25 @@ namespace Common.Util
                 Mode = cipherMode,
                 Padding = PaddingMode.PKCS7,
                 IV = Iv
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="encoding"></param>
+        /// <param name="iv"></param>
+        /// <param name="cipherMode"></param>
+        /// <returns></returns>
+        private RijndaelManaged CreateRijndaelManaged(string key, Encoding encoding, byte[] iv,CipherMode cipherMode = CipherMode.CBC)
+        {
+            return new RijndaelManaged
+            {
+                Key = encoding.GetBytes(key),
+                Mode = cipherMode,
+                Padding = PaddingMode.PKCS7,
+                IV = iv
             };
         }
 
@@ -172,16 +232,32 @@ namespace Common.Util
         /// <param name="key">密钥</param>
         /// <param name="encoding">编码</param>
         /// <param name="cipherMode">密码模式</param>
-        public string AesDecrypt(string value, string key, Encoding encoding, CipherMode cipherMode = CipherMode.CBC)
+        /// <param name="ivStr"></param>
+        public string AesDecrypt(string value, string key, Encoding encoding, CipherMode cipherMode = CipherMode.CBC, string ivStr = null)
         {
             if (string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(key))
-                return string.Empty;
-            var rijndaelManaged = CreateRijndaelManaged(key, encoding, cipherMode);
-            using (var transform = rijndaelManaged.CreateDecryptor(rijndaelManaged.Key, rijndaelManaged.IV))
             {
-                return GetDecryptResult(value, encoding, transform);
+                return string.Empty;
+            }
+            if (string.IsNullOrEmpty(ivStr) || string.IsNullOrEmpty(ivStr))
+            {
+                var rijndaelManaged = CreateRijndaelManaged(key, encoding, cipherMode);
+                using (var transform = rijndaelManaged.CreateDecryptor(rijndaelManaged.Key, rijndaelManaged.IV))
+                {
+                    return GetDecryptResult(value, encoding, transform);
+                }
+            }
+            else
+            {
+                var newIv = encoding.GetBytes(ivStr);
+                var rijndaelManaged = CreateRijndaelManaged(key, encoding, newIv, cipherMode);
+                using (var transform = rijndaelManaged.CreateDecryptor(rijndaelManaged.Key, rijndaelManaged.IV))
+                {
+                    return GetDecryptResult(value, encoding, transform);
+                }
             }
         }
+
 
         /// <summary>
         /// 获取加密结果

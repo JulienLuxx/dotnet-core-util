@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Common.Util
@@ -20,9 +21,13 @@ namespace Common.Util
 
         string AesEncrypt(string value, string key);
 
+        string AesEncrypt(string value, string key, Encoding encoding, string ivStr = null);
+
         string AesDecrypt(string value);
 
         string AesDecrypt(string value, string key);
+
+        string AesDecrypt(string value, string key, Encoding encoding, CipherMode cipherMode = CipherMode.CBC, string ivStr = null);
 
         string DesEncrypt(object value);
 
