@@ -11,5 +11,19 @@ namespace Common.Util
         {
             return date.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CreateSpecificCulture("en-US"));
         }
+
+        public static long ToUnixTimeStamp(this DateTime dateTime)
+        {
+            var start = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
+            long ticks = (dateTime - start.Add(new TimeSpan(8, 0, 0))).Ticks;
+            return ticks/TimeSpan.TicksPerSecond;
+        }
+
+        public static DateTime ToDateTime(this long timestamp)
+        {
+            var start = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
+            TimeSpan span = new TimeSpan(long.Parse(timestamp + "0000000"));
+            return start.Add(span).Add(new TimeSpan(8, 0, 0));
+        }
     }
 }
