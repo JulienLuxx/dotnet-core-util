@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.XUnitTest", "Common.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.WeComCore", "Common.WeComCore\Common.WeComCore.csproj", "{097E982D-A09D-48B4-9E30-B289573879F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.AliSMSCore", "Common.AliSMSCore\Common.AliSMSCore.csproj", "{084B193B-FE2B-4A04-85CC-77A44CA2B347}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.AliSMSCore", "Common.AliSMSCore\Common.AliSMSCore.csproj", "{084B193B-FE2B-4A04-85CC-77A44CA2B347}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Swagger.Extensions", "Common.Swagger.Extensions\Common.Swagger.Extensions.csproj", "{AE3B0B79-D953-4554-8BCF-004D9CD18BF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Swagger.Extensions", "Common.Swagger.Extensions\Common.Swagger.Extensions.csproj", "{AE3B0B79-D953-4554-8BCF-004D9CD18BF1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.AliyunCSBCore", "Common.AliyunCSBCore\Common.AliyunCSBCore.csproj", "{693B4956-2A9F-40F4-B317-7D9254320403}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{AE3B0B79-D953-4554-8BCF-004D9CD18BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE3B0B79-D953-4554-8BCF-004D9CD18BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE3B0B79-D953-4554-8BCF-004D9CD18BF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{693B4956-2A9F-40F4-B317-7D9254320403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{693B4956-2A9F-40F4-B317-7D9254320403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{693B4956-2A9F-40F4-B317-7D9254320403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{693B4956-2A9F-40F4-B317-7D9254320403}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
