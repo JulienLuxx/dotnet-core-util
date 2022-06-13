@@ -380,6 +380,120 @@ namespace Common.Util
 
         #endregion
 
+        #region RSA签名
+
+        /// <summary>
+        /// RSA加密，采用 SHA1 算法
+        /// </summary>
+        /// <param name="value">待加密的值</param>
+        /// <param name="key">密钥</param>
+        public string RsaSign(string value, string key)
+        {
+            return RsaSign(value, key, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// RSA加密，采用 SHA1 算法
+        /// </summary>
+        /// <param name="value">待加密的值</param>
+        /// <param name="key">密钥</param>
+        /// <param name="encoding">编码</param>
+        public string RsaSign(string value, string key, Encoding encoding)
+        {
+            return RsaSign(value, key, encoding, RSAType.RSA);
+        }
+
+        /// <summary>
+        /// RSA加密，采用 SHA256 算法
+        /// </summary>
+        /// <param name="value">待加密的值</param>
+        /// <param name="key">密钥</param>
+        public string Rsa2Sign(string value, string key)
+        {
+            return Rsa2Sign(value, key, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// RSA加密，采用 SHA256 算法
+        /// </summary>
+        /// <param name="value">待加密的值</param>
+        /// <param name="key">密钥</param>
+        /// <param name="encoding">编码</param>
+        public string Rsa2Sign(string value, string key, Encoding encoding)
+        {
+            return RsaSign(value, key, encoding, RSAType.RSA2);
+        }
+
+        /// <summary>
+        /// Rsa加密
+        /// </summary>
+        private string RsaSign(string value, string key, Encoding encoding, RSAType type)
+        {
+            if (string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(key))
+                return string.Empty;
+            var rsa = new RsaHelper(type, encoding, key);
+            return rsa.Sign(value);
+        }
+
+        /// <summary>
+        /// Rsa验签，采用 SHA1 算法
+        /// </summary>
+        /// <param name="value">待验签的值</param>
+        /// <param name="publicKey">公钥</param>
+        /// <param name="sign">签名</param>
+        public bool RsaVerify(string value, string publicKey, string sign)
+        {
+            return RsaVerify(value, publicKey, sign, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Rsa验签，采用 SHA1 算法
+        /// </summary>
+        /// <param name="value">待验签的值</param>
+        /// <param name="publicKey">公钥</param>
+        /// <param name="sign">签名</param>
+        /// <param name="encoding">编码</param>
+        public bool RsaVerify(string value, string publicKey, string sign, Encoding encoding)
+        {
+            return RsaVerify(value, publicKey, sign, encoding, RSAType.RSA);
+        }
+
+        /// <summary>
+        /// Rsa验签，采用 SHA256 算法
+        /// </summary>
+        /// <param name="value">待验签的值</param>
+        /// <param name="publicKey">公钥</param>
+        /// <param name="sign">签名</param>
+        public bool Rsa2Verify(string value, string publicKey, string sign)
+        {
+            return Rsa2Verify(value, publicKey, sign, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Rsa验签，采用 SHA256 算法
+        /// </summary>
+        /// <param name="value">待验签的值</param>
+        /// <param name="publicKey">公钥</param>
+        /// <param name="sign">签名</param>
+        /// <param name="encoding">编码</param>
+        public bool Rsa2Verify(string value, string publicKey, string sign, Encoding encoding)
+        {
+            return RsaVerify(value, publicKey, sign, encoding, RSAType.RSA2);
+        }
+
+        /// <summary>
+        /// Rsa验签
+        /// </summary>
+        private bool RsaVerify(string value, string publicKey, string sign, Encoding encoding, RSAType type)
+        {
+            if (string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(publicKey) || string.IsNullOrWhiteSpace(sign))
+                return false;
+            var rsa = new RsaHelper(type, encoding, publicKey: publicKey);
+            return rsa.Verify(value, sign);
+        }
+
+        #endregion
+
         public string CreateRandomCode(int codeLength, bool isPurelyNumerical=true) 
         {
             var chars = string.Empty;
