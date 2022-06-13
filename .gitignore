@@ -26,3 +26,6 @@
 /Common/Common.AliSMSCore/obj
 /Common/Common.AliSMSCore/bin/Debug/netstandard2.0
 /Common/Common.Swagger.Extensions/obj
+/Common/Common.AliyunCSBCore/bin/Debug/netstandard2.0
+/Common/Common.AliyunCSBCore/obj
+/Common/Common.AliyunCSBCore/bin/Release/netstandard2.0
