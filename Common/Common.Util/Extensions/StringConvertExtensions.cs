@@ -59,7 +59,7 @@ namespace Common.Util
         /// <param name="value">StringValue</param>
         /// <param name="filterValue">Out StringValue</param>
         /// <param name="isTrim">WhetherNeedTrim</param>
-        /// <returns>If value be empty or whitespace, return true</returns>
+        /// <returns>If value be empty or whitespace, return false</returns>
         public static bool FilterEmptyWhiteSpace(this string value, out string filterValue, bool isTrim = false)
         {
             if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
