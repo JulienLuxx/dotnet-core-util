@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net.Http;
+using System.Net;
 
 namespace Common.CoreUtil
 {
@@ -52,7 +53,17 @@ namespace Common.CoreUtil
         {
             if (!services.Where(x => x.ServiceType == typeof(IHttpClientFactory)).Any())
             {
-                services.AddHttpClient();
+                services.AddHttpClient("default");
+                services.AddHttpClient<HttpClient>("decompression").ConfigurePrimaryHttpMessageHandler(h =>
+                {
+                    var handler = new HttpClientHandler();
+                    //handler.AutomaticDecompression = DecompressionMethods.GZip;
+                    if (handler.SupportsAutomaticDecompression)
+                    {
+                        handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+                    }
+                    return handler;
+                });
             }
             if (!services.Where(x => x.ServiceType == typeof(IMapUtil)).Any())
             {
