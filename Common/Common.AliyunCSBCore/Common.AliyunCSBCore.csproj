@@ -23,4 +23,8 @@
     <DocumentationFile>bin\Release\netstandard2.0\Common.AliyunCSBCore.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
+  </ItemGroup>
+
 </Project>
