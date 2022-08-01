@@ -28,44 +28,38 @@ namespace Common.BaiduAICore
             paramDict.Add("client_secret", clientSecret);
 
             var content = new FormUrlEncodedContent(paramDict);
-            using (var client = _clientFactory.CreateClient(_clientName))
+            using (var response = await _clientFactory.CreateClient(_clientName).PostAsync(url, content, cancellationToken))
             {
-                using (var response = await client.PostAsync(url, content, cancellationToken))
+                if (response.IsSuccessStatusCode)
                 {
-                    if (response.IsSuccessStatusCode)
+                    if (response.Content.Headers.ContentLength.HasValue)
                     {
-                        if (response.Content.Headers.ContentLength.HasValue)
-                        {
-                            var result = await response.Content.ReadAsStringAsync();
-                            return new HttpClientResult<string>(result, response.IsSuccessStatusCode, response.StatusCode);
-                        }
+                        var result = await response.Content.ReadAsStringAsync();
+                        return new HttpClientResult<string>(result, response.IsSuccessStatusCode, response.StatusCode);
                     }
-                    return new HttpClientResult<string>(string.Empty, response.IsSuccessStatusCode, response.StatusCode);
                 }
+                return new HttpClientResult<string>(string.Empty, response.IsSuccessStatusCode, response.StatusCode);
             }
         }
 
         private async Task<IHttpClientResult> PostImageBase64Async(string accessToken, byte[] imageBuffer, string url, CancellationToken cancellationToken = default)
         {
-            url = url + accessToken;
+            url += accessToken;
             var base64 = Convert.ToBase64String(imageBuffer);
             var imageBase64 = "image=" + HttpUtility.UrlEncode(base64);
             var imageBytes = Encoding.Default.GetBytes(imageBase64);
             var content = new ByteArrayContent(imageBytes, 0, imageBytes.Length);
-            using (var client = _clientFactory.CreateClient(_clientName))
+            using (var response = await _clientFactory.CreateClient(_clientName).PostAsync(url, content, cancellationToken))
             {
-                using (var response = await client.PostAsync(url, content, cancellationToken))
+                if (response.IsSuccessStatusCode)
                 {
-                    if (response.IsSuccessStatusCode)
+                    if (response.Content.Headers.ContentLength.HasValue)
                     {
-                        if (response.Content.Headers.ContentLength.HasValue)
-                        {
-                            var result = await response.Content.ReadAsStringAsync();
-                            return new HttpClientResult<string>(result, response.IsSuccessStatusCode, response.StatusCode);
-                        }
+                        var result = await response.Content.ReadAsStringAsync();
+                        return new HttpClientResult<string>(result, response.IsSuccessStatusCode, response.StatusCode);
                     }
-                    return new HttpClientResult<string>(string.Empty, response.IsSuccessStatusCode, response.StatusCode);
                 }
+                return new HttpClientResult<string>(string.Empty, response.IsSuccessStatusCode, response.StatusCode);
             }
         }
 
