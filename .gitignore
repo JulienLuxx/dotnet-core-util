@@ -33,3 +33,5 @@
 /Common/Common.BaiduAICore/bin/Debug/netstandard2.0
 /Common/Common.BaiduAICore/obj
 /Common/Common.BaiduAICore/bin/Release/netstandard2.0
+/Common/Common.ImageUtil/bin/Debug/netstandard2.0
+/Common/Common.ImageUtil/obj
