@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common.CoreUtil\Common.CoreUtil.csproj" />
+    <ProjectReference Include="..\Common.ImageUtil\Common.ImageUtil.csproj" />
     <ProjectReference Include="..\Common.Util\Common.Util.csproj" />
   </ItemGroup>
 
