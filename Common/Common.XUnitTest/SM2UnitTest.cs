@@ -32,5 +32,24 @@ namespace Common.XUnitTest
             Assert.Equal("{\"aac002\":\"45012119930940463X\",\"aac003\":\"潘某某\",\"aac045\":\"18476927841\"}", original);
         }
 
+        [Theory]
+        [InlineData("{\"aac002\":\"45012119930940463X\",\"aac003\":\"潘某某\",\"aac045\":\"18476927841\"}")]
+        public void EncryptAndDecryptTest(string plainTxt)
+        {
+            // arrange
+            var handle = new SM2CryptoUtil(generatePublicKey, generatePrivateKey, SM2CryptoUtil.Mode.C1C3C2);
+
+            // act
+            var encrypted = handle.Encrypt(Encoding.UTF8.GetBytes(plainTxt));
+            var encryptedTxt = ByteUtils.ToHexString(encrypted);
+            Assert.NotEmpty(encrypted);
+
+            var textBytes = ByteUtils.GetBytesByHexString(encryptedTxt);
+            var originalBytes = handle.Decrypt(textBytes);
+            var original = Encoding.UTF8.GetString(originalBytes);
+
+            //assert
+            Assert.Equal("{\"aac002\":\"45012119930940463X\",\"aac003\":\"潘某某\",\"aac045\":\"18476927841\"}", original);
+        }
     }
 }
