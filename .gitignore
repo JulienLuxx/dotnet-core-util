@@ -36,3 +36,6 @@
 /Common/Common.ImageUtil/bin/Debug/netstandard2.0
 /Common/Common.ImageUtil/obj
 /Common/Common.ImageUtil/bin
+/Common/Common.XUnitTest/bin/Release/netcoreapp3.1
+/Common/Common.SMUtil/bin/Debug/netstandard2.0
+/Common/Common.SMUtil/obj
