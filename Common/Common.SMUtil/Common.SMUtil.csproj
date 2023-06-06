@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <Version>0.0.1</Version>
+	  <Authors>JulienLux</Authors>
+	  <Company>JulienLux</Company>
+	  <Product>JulienLux</Product>
+	  <Copyright>Copyright (c) 2023 JulienLux</Copyright>
+	  <AssemblyVersion>0.0.1.0</AssemblyVersion>
+	  <FileVersion>0.0.1.0</FileVersion>
+	  <Description>
+	  </Description>
+	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	  <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
+  </ItemGroup>
+
+</Project>
