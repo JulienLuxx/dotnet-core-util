@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,10 +12,17 @@
 	  <FileVersion>0.0.1.0</FileVersion>
 	  <Description>
 	  </Description>
+	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	  <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
 </Project>
