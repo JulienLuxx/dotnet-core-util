@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using static Common.SMUtil.SM2CryptoUtil;
 
 namespace Common.XUnitTest
 {
@@ -50,6 +51,30 @@ namespace Common.XUnitTest
 
             //assert
             Assert.Equal("{\"aac002\":\"45012119930940463X\",\"aac003\":\"潘某某\",\"aac045\":\"18476927841\"}", original);
+        }
+
+        [Theory]
+        [InlineData("{\"aac002\":\"45012119930940463X\",\"aac003\":\"潘某某\",\"aac045\":\"18476927841\"}")]
+        public void SignTest(string text)
+        {
+            var hexText = ByteUtils.ToHexString(Encoding.UTF8.GetBytes(text));
+            // arrange
+            var handle = new SM2CryptoUtil("", generatePrivateKey, Mode.C1C3C2);
+            var signedBytes = handle.Sign(Encoding.UTF8.GetBytes(text));
+            var signed = ByteUtils.ToHexString(signedBytes);
+
+            Assert.NotEmpty(signed);
+        }
+
+        [Theory]
+        [InlineData("3046022100cce97958385426fa8528d7d39bb75f98259ca24bcace4c3c1b1fd3ad631af371022100cafbf4f4c9d01bdd76c5305fff80d2d39a24fe11c59dbd6bf757e3b7a884c839")]
+        public void VerifySign(string cipherText)
+        {
+            var hexText = ByteUtils.ToHexString(Encoding.UTF8.GetBytes("{\"aac002\":\"45012119930940463X\",\"aac003\":\"潘某某\",\"aac045\":\"18476927841\"}"));
+            var handle = new SM2CryptoUtil(null, generatePrivateKey, Mode.C1C3C2);
+            var textBytes = ByteUtils.GetBytesByHexString(cipherText);
+            var flag = handle.VerifySign(ByteUtils.GetBytesByHexString(hexText), textBytes);
+            Assert.True(flag);
         }
     }
 }
