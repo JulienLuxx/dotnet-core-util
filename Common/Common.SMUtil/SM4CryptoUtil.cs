@@ -327,11 +327,35 @@ namespace Common.SMUtil
 
     public class SM4CryptoUtil
     {
-        public string secretKey = "";
+        private string secretKey = "";
 
-        public string iv = "";
+        private string iv = "";
 
-        public bool hexString;
+        private bool hexString;
+
+        public SM4CryptoUtil() { }
+
+        public SM4CryptoUtil(string secretKey, string iv, bool hexString = false)
+        {
+            this.secretKey = secretKey;
+            this.iv = iv;
+            this.hexString = hexString;
+        }
+
+        public void SetIv(string iv)
+        {
+            this.iv = iv;
+        }
+
+        public void SetSecretKey(string secretKey)
+        {
+            this.secretKey = secretKey;
+        }
+
+        public void SetHexString(bool hexString)
+        {
+            this.hexString = hexString;
+        }
 
         public string EncryptECB(string plainText, Encoding encoding)
         {
