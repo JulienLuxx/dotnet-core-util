@@ -265,27 +265,23 @@ namespace Common.SMUtil
             List<byte> list = new List<byte>();
             if (ctx.mode == 1)
             {
-                int num2 = 0;
-                while (num > 0)
+                for (int j = 0; num > 0; num -= 16, j++)
                 {
-                    byte[] array2 = new byte[16];
-                    byte[] array3 = new byte[16];
-                    byte[] array4 = new byte[16];
-                    Array.Copy(array, j * 16, array2, 0, (num > 16) ? 16 : num);
+                    byte[] inBytes = new byte[16];
+                    byte[] outBytes = new byte[16];
+                    byte[] outl = new byte[16];
+
+                    Array.Copy(array, j * 16, inBytes, 0, num > 16 ? 16 : num);
                     for (i = 0; i < 16; i++)
                     {
-                        array3[i] = (byte)(array2[i] ^ iv[i]);
+                        outBytes[i] = (byte)(inBytes[i] ^ iv[i]);
                     }
-
-                    sm4_one_round(ctx.sk, array3, array4);
-                    Array.Copy(array4, 0, iv, 0, 16);
-                    for (int j = 0; j < 16; j++)
+                    sm4_one_round(ctx.sk, outBytes, outl);
+                    Array.Copy(outl, 0, iv, 0, 16);
+                    for (int k = 0; k < 16; k++)
                     {
-                        list.Add(array4[j]);
+                        list.Add(outl[k]);
                     }
-
-                    num -= 16;
-                    num2++;
                 }
             }
             else
