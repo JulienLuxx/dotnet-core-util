@@ -271,7 +271,7 @@ namespace Common.SMUtil
                     byte[] array2 = new byte[16];
                     byte[] array3 = new byte[16];
                     byte[] array4 = new byte[16];
-                    Array.Copy(array, i * 16, array2, 0, (num > 16) ? 16 : num);
+                    Array.Copy(array, j * 16, array2, 0, (num > 16) ? 16 : num);
                     for (i = 0; i < 16; i++)
                     {
                         array3[i] = (byte)(array2[i] ^ iv[i]);
