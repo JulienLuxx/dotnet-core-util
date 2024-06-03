@@ -41,3 +41,5 @@
 /Common/Common.SMUtil/obj
 /Common/Common.SMUtil/bin
 /Common/.vs
+/Common/Common.AliSMSCore/bin/Release
+/Common/Common.Util/bin/Release
