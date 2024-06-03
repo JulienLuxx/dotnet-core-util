@@ -27,6 +27,6 @@ QrCodeUtil is base on SkiaSharp.Qrcode library encapsulation.
 
 ## Common.SMUtil
 Is some util class encapsulation for SM crypto,
-is base on Portable.BouncyCastle library,
+is base on BouncyCastle.Cryptography library,
 support .Net standard 2.0 above.
 Currently include SM2,SM3,SM4.The actual test is compatible with the Java class library hutool results.
