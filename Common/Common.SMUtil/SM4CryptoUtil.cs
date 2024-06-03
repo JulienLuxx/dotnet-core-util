@@ -1,4 +1,6 @@
-﻿using Org.BouncyCastle.Utilities.Encoders;
+﻿using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Utilities.Encoders;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -321,6 +323,9 @@ namespace Common.SMUtil
         }
     }
 
+    /// <summary>
+    /// SM4 crypto util class
+    /// </summary>
     public class SM4CryptoUtil
     {
         private string secretKey = "";
@@ -331,6 +336,12 @@ namespace Common.SMUtil
 
         public SM4CryptoUtil() { }
 
+        /// <summary>
+        /// Ctor with key and iv and isHexString
+        /// </summary>
+        /// <param name="secretKey">secretKey</param>
+        /// <param name="iv">iv</param>
+        /// <param name="hexString">IsHexString</param>
         public SM4CryptoUtil(string secretKey, string iv, bool hexString = false)
         {
             this.secretKey = secretKey;
@@ -353,6 +364,12 @@ namespace Common.SMUtil
             this.hexString = hexString;
         }
 
+        /// <summary>
+        ///  Using ECB mode to encrypt plain text
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
         public string EncryptECB(string plainText, Encoding encoding)
         {
             SM4_Context sM4_Context = new SM4_Context();
@@ -365,6 +382,12 @@ namespace Common.SMUtil
             return ByteUtils.ToHexString(data);
         }
 
+        /// <summary>
+        ///  Using ECB mode to decrypt cipher text
+        /// </summary>
+        /// <param name="cipherText"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
         public string DecryptECB(string cipherText, Encoding encoding)
         {
             SM4_Context sM4_Context = new SM4_Context();
@@ -377,6 +400,12 @@ namespace Common.SMUtil
             return encoding.GetString(bytes);
         }
 
+        /// <summary>
+        ///  Using CBC mode to encrypt plain text
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
         public string EncryptCBC(string plainText, Encoding encoding)
         {
             SM4_Context sM4_Context = new SM4_Context();
@@ -401,6 +430,12 @@ namespace Common.SMUtil
             return encoding.GetString(Hex.Encode(data));
         }
 
+        /// <summary>
+        ///  Using CBC mode to decrypt cipher text
+        /// </summary>
+        /// <param name="cipherText"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
         public string DecryptCBC(string cipherText, Encoding encoding)
         {
             SM4_Context sM4_Context = new SM4_Context();
@@ -423,6 +458,82 @@ namespace Common.SMUtil
             sM.sm4_setkey_dec(sM4_Context, key);
             byte[] bytes = sM.sm4_crypt_cbc(sM4_Context, array, ByteUtils.GetBytesByHexString(cipherText));
             return encoding.GetString(bytes);
+        }
+
+        /// <summary>
+        /// Using CTR mode to encrypt plain text
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public string EncryptCTR(string plainText, Encoding encoding)
+        {
+            byte[] keyBytes;
+            byte[] ivBytes;
+            if (hexString)
+            {
+                keyBytes = ByteUtils.GetBytesByHexString(secretKey);
+                ivBytes = ByteUtils.GetBytesByHexString(iv);
+            }
+            else
+            {
+                keyBytes = encoding.GetBytes(secretKey);
+                ivBytes = encoding.GetBytes(iv);
+            }
+
+            var ctrCipher = CipherUtilities.GetCipher("SM4/CTR/NoPadding");
+            var sm4Key = ParameterUtilities.CreateKeyParameter("SM4", keyBytes);
+            var keyParamWithIV = new ParametersWithIV(sm4Key, ivBytes);
+            ctrCipher.Init(true, keyParamWithIV);
+            var blockSize = ctrCipher.GetBlockSize();
+            var plainTextBytes = encoding.GetBytes(plainText);
+            var cipherTextBytes = new byte[ctrCipher.GetOutputSize(plainTextBytes.Length)];
+            var processLength =
+         ctrCipher.ProcessBytes(plainTextBytes, 0, plainTextBytes.Length, cipherTextBytes, 0);
+            var finalLength = ctrCipher.DoFinal(cipherTextBytes, processLength);
+            var length = cipherTextBytes.Length - (blockSize - finalLength);
+            var finalCipherTextBytes = new byte[length < 0 ? finalLength : length];
+            Array.Copy(cipherTextBytes, 0, finalCipherTextBytes, 0, finalCipherTextBytes.Length);
+            return Hex.ToHexString(cipherTextBytes, false);
+        }
+
+        /// <summary>
+        ///  Using CTR mode to decrypt cipher text
+        /// </summary>
+        /// <param name="cipherText"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public string DecryptCTR(string cipherText, Encoding encoding)
+        {
+            byte[] keyBytes;
+            byte[] ivBytes;
+            if (hexString)
+            {
+                keyBytes = ByteUtils.GetBytesByHexString(secretKey);
+                ivBytes = ByteUtils.GetBytesByHexString(iv);
+                //keyBytes = Hex.Decode(secretKey);
+                //ivBytes = Hex.Decode(iv);
+            }
+            else
+            {
+                keyBytes = encoding.GetBytes(secretKey);
+                ivBytes = encoding.GetBytes(iv);
+            }
+            var ctrCipher = CipherUtilities.GetCipher("SM4/CTR/NoPadding");
+            var sm4Key = ParameterUtilities.CreateKeyParameter("SM4", keyBytes);
+
+            var keyParamWithIV = new ParametersWithIV(sm4Key, ivBytes);
+            ctrCipher.Init(false, keyParamWithIV);
+            var blockSize = ctrCipher.GetBlockSize();
+            var cipherTextBytes = Hex.Decode(cipherText);
+            var plainTextBytes = new byte[ctrCipher.GetOutputSize(cipherTextBytes.Length)];
+            var processLength =
+                ctrCipher.ProcessBytes(cipherTextBytes, 0, cipherTextBytes.Length, plainTextBytes, 0);
+            var finalLength = ctrCipher.DoFinal(plainTextBytes, processLength);
+            var length = plainTextBytes.Length - (blockSize - finalLength);
+            var finalPlainTextBytes = new byte[length < 0 ? finalLength : length];
+            Array.Copy(plainTextBytes, 0, finalPlainTextBytes, 0, finalPlainTextBytes.Length);
+            return encoding.GetString(plainTextBytes);
         }
     }
 }
