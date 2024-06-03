@@ -72,9 +72,9 @@ namespace Common.Util
 
         public static string GetRuntimePath(string path)
         {
-            if (RuntimeHelper.IsLinuxRunTime())
+            if (RuntimeHelper.IsUnixRunTime())
             {
-                return GetLinuxPath(path);
+                return GetUnixPath(path);
             }
             if (RuntimeHelper.IsWindowRunTime())
             {
@@ -83,7 +83,7 @@ namespace Common.Util
             return path;
         }
 
-        public static string GetLinuxPath(string path)
+        public static string GetUnixPath(string path)
         {
             string pathTemp = Path.Combine(path);
             return pathTemp.Replace("\\", "/");

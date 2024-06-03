@@ -12,7 +12,7 @@ namespace Common.Util
             return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
-        public static bool IsLinuxRunTime()
+        public static bool IsUnixRunTime()
         {
             return RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
         }
