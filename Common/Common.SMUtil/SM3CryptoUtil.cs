@@ -532,28 +532,28 @@ namespace Common.SMUtil
     }
 
     /// <summary>
-    /// Sm3算法(10进制的ASCII)  
-    /// 在SHA-256基础上改进实现的一种算法  
-    /// 对标国际MD5算法和SHA算法
+    /// Sm3
     /// </summary>
     public static class Sm3CryptoUtil
     {
         /// <summary>
-        /// sm3加密(使用自定义密钥)
+        /// sm3encrypt(using customize key)
         /// </summary>
         /// <param name="data"></param>
+        /// <param name="key"></param>
+        /// <param name="encoding"></param>
         /// <returns></returns>
-        public static byte[] ToSM3byte(string data, string key)
+        public static byte[] ToSM3byte(string data, string key, Encoding encoding)
         {
-            byte[] msg1 = Encoding.Default.GetBytes(data);
-            byte[] key1 = Encoding.Default.GetBytes(key);
+            byte[] dataBytes = encoding.GetBytes(data);
+            byte[] keyBytes = encoding.GetBytes(key);
 
-            KeyParameter keyParameter = new KeyParameter(key1);
-            SM3Digest sm3 = new SM3Digest();
+            KeyParameter keyParameter = new KeyParameter(keyBytes);
+            Org.BouncyCastle.Crypto.Digests.SM3Digest sm3 = new Org.BouncyCastle.Crypto.Digests.SM3Digest();
 
-            HMac mac = new HMac(sm3);//带密钥的杂凑算法
+            HMac mac = new HMac(sm3);
             mac.Init(keyParameter);
-            mac.BlockUpdate(msg1, 0, msg1.Length);
+            mac.BlockUpdate(dataBytes, 0, dataBytes.Length);
             byte[] result = new byte[mac.GetMacSize()];
 
             mac.DoFinal(result, 0);
@@ -561,32 +561,39 @@ namespace Common.SMUtil
         }
 
         /// <summary>
-        /// sm3加密
+        /// sm3encrypt
         /// </summary>
         /// <param name="data"></param>
+        /// <param name="encoding"></param>
         /// <returns></returns>
-        public static byte[] ToSM3byte(this string data)
+        public static byte[] ToSM3byte(string data, Encoding encoding)
         {
-            var msg = data.ToHexByte();//把字符串转成16进制的ASCII码 
-            SM3Digest sm3 = new SM3Digest();
+            var msg = ToHexByte(data, encoding);
+            Org.BouncyCastle.Crypto.Digests.SM3Digest sm3 = new Org.BouncyCastle.Crypto.Digests.SM3Digest();
             sm3.BlockUpdate(msg, 0, msg.Length);
-            byte[] md = new byte[sm3.GetDigestSize()];//SM3算法产生的哈希值大小
+            byte[] md = new byte[sm3.GetDigestSize()];
             sm3.DoFinal(md, 0);
             return Hex.Encode(md);
         }
-        public static string ToSM3String(this string data)
+        public static string ToSM3String(string data, Encoding encoding)
         {
-            return BytesToHexString(ToSM3byte(data));
+            return BytesToHexString(ToSM3byte(data, encoding));
+        }
+
+        public static string ToSM3String(string data, string key, Encoding encoding)
+        {
+            return BytesToHexString(ToSM3byte(data, key, encoding));
         }
 
         /// <summary>
-        /// 字符串转16进制字节数组
+        /// string convert to Hexadecimal byte array
         /// </summary>
         /// <param name="data"></param>
+        /// <param name="encoding"></param>
         /// <returns></returns>
-        public static byte[] ToHexByte(this string data)
+        public static byte[] ToHexByte(string data, Encoding encoding)
         {
-            byte[] msg1 = Encoding.Default.GetBytes(data);
+            byte[] msg1 = encoding.GetBytes(data);
             string hexString = BytesToHexString(msg1);
             byte[] returnBytes = new byte[hexString.Length / 2];
             for (int i = 0; i < returnBytes.Length; i++)
@@ -595,10 +602,10 @@ namespace Common.SMUtil
         }
 
         /// <summary>
-        /// byte[]数组转16进制字符串
+        /// Hexadecimal byte array conver to string
         /// </summary>
-        /// <param name="input">byte[]数组</param>
-        /// <returns>16进制字符串</returns>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string BytesToHexString(byte[] input)
         {
             StringBuilder hexString = new StringBuilder(64);
