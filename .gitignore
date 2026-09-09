@@ -46,3 +46,4 @@
 /Common/Common.SMUtil/Common.SMUtil.csproj.user
 /Common/Common.SMUtil/Properties/PublishProfiles
 /Common/Common.Util/Properties/PublishProfiles/FolderProfile.pubxml.user
+/Common/Common.Swagger.Extensions/bin/Release/netstandard2.0
