@@ -43,3 +43,5 @@
 /Common/.vs
 /Common/Common.AliSMSCore/bin/Release
 /Common/Common.Util/bin/Release
+/Common/Common.SMUtil/Common.SMUtil.csproj.user
+/Common/Common.SMUtil/Properties/PublishProfiles
