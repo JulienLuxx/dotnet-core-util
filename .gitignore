@@ -45,3 +45,4 @@
 /Common/Common.Util/bin/Release
 /Common/Common.SMUtil/Common.SMUtil.csproj.user
 /Common/Common.SMUtil/Properties/PublishProfiles
+/Common/Common.Util/Properties/PublishProfiles/FolderProfile.pubxml.user
