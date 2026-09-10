@@ -534,6 +534,7 @@ namespace Common.SMUtil
     /// <summary>
     /// Sm3
     /// </summary>
+    [Obsolete("Sm3CryptoUtil is deprecated: ToSM3String double hex-encodes its result. Use SM3Util instead. / Sm3CryptoUtil 已过时：ToSM3String 输出存在双重十六进制编码缺陷，请改用 SM3Util。",false)]
     public static class Sm3CryptoUtil
     {
         /// <summary>
