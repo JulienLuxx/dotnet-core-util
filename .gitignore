@@ -48,3 +48,9 @@
 /Common/Common.Util/Properties/PublishProfiles/FolderProfile.pubxml.user
 /Common/Common.Swagger.Extensions/bin/Release/netstandard2.0
 /Common/Common.XUnitTest/bin/Debug/net8.0
+/Common/Common.XUnitTest/bin/Release/net8.0
+/Common/Common.ImageUtil/Common.ImageUtil.csproj.user
+/Common/Common.ImageUtil/Properties/PublishProfiles
+/Common/Common.WeComCore/bin/Release
+/Common/Common.CoreUtil/bin/Release
+/Common/Common.Swagger.Extensions/bin/Release
