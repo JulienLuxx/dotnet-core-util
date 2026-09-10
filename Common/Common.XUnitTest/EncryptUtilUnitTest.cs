@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Common.Util;
 using System;
 using System.Collections.Generic;
@@ -48,10 +48,16 @@ namespace Common.XUnitTest
         }
 
         [Fact]
-        public void GetRuntimePath()
+        public void GetUnixPathTest()
         {
-            var path = FileHelper.GetLinuxPath("D:\\WebSite\\MobileServerFri /upload /20210423 /Common.WeComCore.0.0.3.nupkg");
-            Assert.True(false);
+            //arrange：Windows 风格路径（含正斜杠段与空格）
+            var windowsPath = "D:\\WebSite\\MobileServerFri /upload /20210423 /Common.WeComCore.0.0.3.nupkg";
+
+            //act
+            var path = FileHelper.GetUnixPath(windowsPath);
+
+            //assert：反斜杠全部转换为正斜杠，其余内容保持不变
+            Assert.Equal("D:/WebSite/MobileServerFri /upload /20210423 /Common.WeComCore.0.0.3.nupkg", path);
         }
     }
 }
