@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -36,6 +36,7 @@ namespace Common.Util
 
         public long State { get; set; }
 
+        [Obsolete("Use the long overload instead")]
         public ResultDto(dynamic data, bool hasData, string message, int state)
         {
             Data = data;
@@ -51,14 +52,6 @@ namespace Common.Util
             Message = message;
             State = state;
         }
-
-        //public ResultDto(dynamic data, int state = 200, string message = null)
-        //{
-        //    Data = data;
-        //    HasData = null != data;
-        //    Message = message;
-        //    State = state;
-        //}
 
         public ResultDto(dynamic data, long state = 200, string message = null)
         {
@@ -76,6 +69,7 @@ namespace Common.Util
             State = state;
         }
 
+        [Obsolete("Use the long overload instead")]
         public ResultDto(int state, string message = null)
         {
             Data = default;
@@ -107,6 +101,7 @@ namespace Common.Util
 
         public long State { get; set; }
 
+        [Obsolete("Use the long overload instead")]
         public ResultDto(T data, bool hasData, string message, int state)
         {
             Data = data;
@@ -123,14 +118,6 @@ namespace Common.Util
             State = state;
         }
 
-        //public ResultDto(T data, int state = 200, string message = null) 
-        //{
-        //    Data = data;
-        //    HasData = null != data;
-        //    Message = message;
-        //    State = state;
-        //}
-
         public ResultDto(T data, long state = 200, string message = null)
         {
             Data = data;
@@ -139,7 +126,7 @@ namespace Common.Util
             State = state;
         }
 
-        public ResultDto(string message, int state = -1) 
+        public ResultDto(string message, int state = -1)
         {
             Data = default;
             HasData = false;
@@ -147,6 +134,7 @@ namespace Common.Util
             State = state;
         }
 
+        [Obsolete("Use the long overload instead")]
         public ResultDto(int state, string message = null)
         {
             Data = default;
