@@ -14,6 +14,7 @@ using Org.BouncyCastle.Math;
 
 namespace Common.SMUtil
 {
+    [Obsolete("SM2CryptoUtil is deprecated: it depends on a broken SM3Digest and throws TypeLoadException at runtime. Use SM2Util instead. / SM2CryptoUtil 已过时：内部依赖损坏的 SM3Digest，运行时抛出 TypeLoadException，请改用 SM2Util。", true)]
     public class SM2CryptoUtil
     {
         public SM2CryptoUtil(byte[] pubkey, byte[] privkey, Mode mode)
