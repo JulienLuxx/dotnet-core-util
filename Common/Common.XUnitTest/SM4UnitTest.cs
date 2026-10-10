@@ -148,5 +148,52 @@ namespace Common.XUnitTest
             Assert.Throws<ArgumentOutOfRangeException>(() => longIvHandle.EncryptCBC("test", Encoding.UTF8));
             Assert.Throws<ArgumentOutOfRangeException>(() => longIvHandle.DecryptCBC("00", Encoding.UTF8));
         }
+
+        [Fact]
+        public void GenerateIvTest()
+        {
+            //arrange
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var encodings = new Encoding[] { Encoding.UTF8, Encoding.ASCII, Encoding.GetEncoding("GBK") };
+            var handle = new SM4CryptoUtil();
+
+            for (int i = 0; i < 200; i++)
+            {
+                //act
+                var iv = handle.GenerateIv();
+
+                //assert：16 个可打印 ASCII 字符（0x21~0x7E），任意常见编码编码后恰 16 字节
+                Assert.Equal(16, iv.Length);
+                Assert.All(iv, ch => Assert.InRange((int)ch, 0x21, 0x7E));
+                foreach (var encoding in encodings)
+                {
+                    Assert.Equal(16, encoding.GetBytes(iv).Length);
+                }
+            }
+        }
+
+        [Theory]
+        [InlineData("gxrc@666")]                                // 单块（< 16 字节）
+        [InlineData("Hello SM4 CBC 多块解密验证测试123")]         // 多块（33 字节 → 3 块）
+        public void GenerateIvSetsInstanceIvTest(string text)
+        {
+            //arrange
+            const string key = "Pxb6zhoARp-PrlE5";
+            var generatedHandle = new SM4CryptoUtil();
+            generatedHandle.SetSecretKey(key);
+            var explicitHandle = new SM4CryptoUtil();
+            explicitHandle.SetSecretKey(key);
+
+            //act：GenerateIv 自生成 IV，对照组显式 SetIv 传入同一返回值
+            var iv = generatedHandle.GenerateIv();
+            explicitHandle.SetIv(iv);
+            var generatedCipher = generatedHandle.EncryptCBC(text, Encoding.UTF8);
+            var explicitCipher = explicitHandle.EncryptCBC(text, Encoding.UTF8);
+            var original = generatedHandle.DecryptCBC(generatedCipher, Encoding.UTF8);
+
+            //assert：同密钥同 IV 的 CBC 密文确定一致，证明 GenerateIv 写入 this.iv 的正是返回值；往返解密还原明文
+            Assert.Equal(explicitCipher, generatedCipher);
+            Assert.Equal(text, original);
+        }
     }
 }

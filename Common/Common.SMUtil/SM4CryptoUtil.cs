@@ -2,6 +2,7 @@
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
 using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Common.SMUtil
@@ -45,6 +46,37 @@ namespace Common.SMUtil
         public void SetHexString(bool hexString)
         {
             this.hexString = hexString;
+        }
+
+        /// <summary>
+        ///  Generate a random 16-byte ASCII IV and set it to the current instance
+        ///  <para>生成 16 字节随机可打印 ASCII 字符串作为 IV 并写入当前实例（等效于 SetIv），随后可直接使用 CBC/CTR 系列方法；IV 也可由外部通过构造函数或 SetIv 传入。任意常见编码（UTF-8/GBK/ASCII）编码后均恰为 16 字节</para>
+        /// </summary>
+        /// <returns>IvString / 16 位随机可打印 ASCII 字符串（0x21~0x7E）</returns>
+        public string GenerateIv()
+        {
+            const int ivLength = 16;
+            const int asciiMin = 0x21;
+            const int asciiRange = 0x7E - 0x21 + 1;
+            // 256 % asciiRange == 68，拒绝 >= 188 的字节以消除取模偏差 / reject bytes >= 188 to avoid modulo bias
+            const int rejectionThreshold = byte.MaxValue + 1 - ((byte.MaxValue + 1) % asciiRange);
+            char[] chars = new char[ivLength];
+            byte[] randomBytes = new byte[1];
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            {
+                int index = 0;
+                while (index < ivLength)
+                {
+                    rng.GetBytes(randomBytes);
+                    if (randomBytes[0] >= rejectionThreshold)
+                    {
+                        continue;
+                    }
+                    chars[index++] = (char)(asciiMin + randomBytes[0] % asciiRange);
+                }
+            }
+            this.iv = new string(chars);
+            return this.iv;
         }
 
         /// <summary>
